@@ -1,0 +1,68 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+
+# Name of this project
+name : terraform-aws-transit-gateway
+
+# Logo for this project
+clouddrove_logo : https://clouddrove.com/images/logo.png
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-transit-gateway
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://travis-ci.org/cloudposse/terraform-aws-vpc.svg?branch=master"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc"
+
+#  Related Projects of this project
+related:
+  - name: "terraform-aws-vpc-peering"
+    description: "Terraform module to create a peering connection between two VPCs"
+    url: "https://github.com/clouddrove/terraform-aws-vpc-peering"
+
+
+#  description of this project
+description: |-
+  Terraform module to provision a Transit Gateway which will create Amazon Virtual Private Clouds (VPCs) and their on-premises networks to a single gateway.
+
+# extra content
+include:
+  - "terraform.md"
+
+# How to use this project
+usage : |-
+  ### Simple Example
+  Include this repository as a module in your existing terraform code:
+  ```hcl
+        module "transit_gateway2" {
+        source = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git"
+
+        name        = "transit"
+        application = "test"
+        environment = "dev"
+        label_order = ["environment", "name", "application"]
+        default_route_table_association = "enable"
+        default_route_table_propagation = "enable"
+        auto_accept_shared_attachments = "enable"
+
+        subnet_ids  = [module.subnets_two.public_subnet_id[1]]
+        vpc_id      = module.vpc_two.vpc_id
+        route_table_id         = module.subnets_two.public_subnet_route_table[1]
+        destination_cidr_block = "10.0.0.0/8"
+
+      }
+  ```
+# Contributors to this project
+contributors:
+  - name: "Kamlesh Bhargav"
+    github: "kamleshbhargav"
+
