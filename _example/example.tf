@@ -46,8 +46,7 @@ locals {
 
 
 module "subnets_one" {
-  //source = "git::https://github.com/clouddrove/terraform-aws-public-subnet.git?ref=tags/0.11.0"
-  source = "./../../_terraform/terraform-aws-subnet"
+  source = "git::https://github.com/clouddrove/terraform-aws-subnet.git"
 
   name        = "subnet1-dev"
   application = "test"
@@ -64,8 +63,7 @@ module "subnets_one" {
 
 
 module "subnets_two" {
-  //source = "git::https://github.com/clouddrove/terraform-aws-public-subnet.git?ref=tags/0.11.0"
-  source = "./../../_terraform/terraform-aws-subnet"
+  source = "git::https://github.com/clouddrove/terraform-aws-subnet.git"
 
   name        = "subnet2-dev"
   application = "test"
@@ -82,8 +80,7 @@ module "subnets_two" {
 
 
 module "subnets_three" {
-  //source = "git::https://github.com/clouddrove/terraform-aws-public-subnet.git?ref=tags/0.11.0"
-  source = "./../../_terraform/terraform-aws-subnet"
+  source = "git::https://github.com/clouddrove/terraform-aws-subnet.git"
 
   name        = "subnet2-dev"
   application = "test"
@@ -100,7 +97,7 @@ module "subnets_three" {
 
 module "transit_gateway" {
 
-  source = "../"
+  source = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git"
 
   name        = "transit"
   application = "test"
