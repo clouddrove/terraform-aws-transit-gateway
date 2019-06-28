@@ -53,12 +53,6 @@ Include this repository as a module in your existing terraform code:
       default_route_table_association = "enable"
       default_route_table_propagation = "enable"
       auto_accept_shared_attachments = "enable"
-
-      subnet_ids  = [module.subnets_two.public_subnet_id[1]]
-      vpc_id      = module.vpc_two.vpc_id
-      route_table_id         = module.subnets_two.public_subnet_route_table[1]
-      destination_cidr_block = "10.0.0.0/8"
-
     }
 ```
 
