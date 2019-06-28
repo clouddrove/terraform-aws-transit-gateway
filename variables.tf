@@ -32,26 +32,9 @@ variable "enabled" {
   default     = "true"
 }
 
-variable "vpc_id" {
-  type        = "string"
-  description = "VPC ID"
-}
-
-variable "subnet_ids" {
-  type        = "list"
-  default     = []
-  description = "List of subnet ids"
-}
-
-variable "route_table_id" {
-  type        = "string"
-  description = "Route table id"
-}
-
-variable "destination_cidr_block" {
-  type        = "string"
-  description = "Base CIDR block which is divided into subnet CIDR blocks (e.g. `10.0.0.0/16`)"
-  default     = "null"
+variable "create_tgw" {
+  description = "Create a transit gateway or not"
+  default     = "true"
 }
 
 variable "default_route_table_association" {
@@ -67,4 +50,14 @@ variable "default_route_table_propagation" {
 variable "auto_accept_shared_attachments" {
   type    = "string"
   default = "enable"
+}
+
+variable "dns_support" {
+  description = "Whether DNS support is enabled"
+  default     = "enable"
+}
+
+variable "vpn_ecmp_support" {
+  description = "Whether VPN Equal Cost Multipath protocol is enabled"
+  default     = "disable"
 }
