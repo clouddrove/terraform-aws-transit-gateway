@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name : Terraform AWS transit-gateway
+name : Terraform AWS Transit Gateway
 
 # License of this project
 license: "MIT"
@@ -63,7 +63,7 @@ usage : |-
   ```
   ### Transit Gateway Diffrent AWS Account
   ```hcl
-      module "postgres" {
+      module "transit-gateway" {
         source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.2"
         name        = "transit-gateway"
         application = "clouddrove"
