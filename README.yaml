@@ -24,7 +24,7 @@ badges:
 
 #  description of this project
 description: |-
-  Terraform module which creates Transit Gateway, Resource Association, Principal Association, Resource Share, Transit Gateway VPC Attachment AWS.
+  Terraform module which creates Transit Gateway, Resource Association, Principal Association, Resource Share, Transit Gateway VPC Attachment on AWS.
 
 # extra content
 include:
@@ -37,11 +37,7 @@ usage : |-
   ### Transit Gateway For Single Account
   ```hcl
     module "transit-gateway" {
-      source                          = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.0"
-
-     module "transit-gateway" {
-       source = "./../../"
-
+       source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.0"
        name        = "transit-gateway"
        application = "clouddrove"
        environment = "test"
@@ -63,24 +59,7 @@ usage : |-
        vpc_attachement_create = false # Enable After once create the subnets
        vpc_id                 = module.vpc.vpc_id
        destination_cidr_block = [ "10.0.0.0/8", "172.16.0.0/12"]
-
      }
-
-     module "vpc-attachement" {
-       source      = "./../../"
-       name        = "transit-gateway"
-       application = "clouddrove"
-       environment = "test"
-       label_order = ["environment", "application", "name"]
-
-       # VPC Attachements
-       vpc_id                 = module.vpc-other.vpc_id
-       destination_cidr_block = ["10.0.0.0/8", "172.16.0.0/12"]
-       vpc_attachement_create = false # Enable After once create the subnets
-       use_existing_transit_gateway_id = true
-       transit_gateway_id              = module.transit-gateway.transit_gateway_id
-     }
-
   ```
   ### Transit Gateway Diffrent AWS Account
   ```hcl
