@@ -132,7 +132,7 @@ Here are some examples of how you can use this module in your inventory structur
 | application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
 | attributes | Additional attributes (e.g. `1`). | list | `<list>` | no |
 | auto_accept_shared_attachments | Whether resource attachment requests are automatically accepted. Valid values: disable, enable. Default value: disable. | string | `disable` | no |
-| aws_ram_resource_share_accepter | Accepter the RAM | bool | `false` | no |
+| aws_ram_resource_share_accepter | Accepter the RAM. | bool | `false` | no |
 | default_route_table_association | Whether resource attachments are automatically associated with the default association route table. Valid values: disable, enable. Default value: enable. | string | `enable` | no |
 | default_route_table_propagation | Whether resource attachments automatically propagate routes to the default propagation route table. Valid values: disable, enable. Default value: enable. | string | `enable` | no |
 | description | Description of the EC2 Transit Gateway | string | `` | no |
@@ -143,15 +143,15 @@ Here are some examples of how you can use this module in your inventory structur
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
 | resource_share_account_ids | Ids of the account where the Transit Gateway should be shared. | list | `<list>` | no |
 | resource_share_allow_external_principals | Whether or not to allow external principals for the Resource Share for the Transit Gateway. | bool | `true` | no |
-| resource_share_arn | ARN of RAM | string | `` | no |
+| resource_share_arn | ARN of RAM. | string | `` | no |
 | resource_share_enable | Whether or not to create a Resource Share for the Transit Gateway. | bool | `false` | no |
 | subnet_ids | Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway. | list | `<list>` | no |
 | tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map | `<map>` | no |
 | tgw_create | Whether or not to create a Transit Gateway. | bool | `false` | no |
 | transit_gateway_default_route_table_association | Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | bool | `true` | no |
 | transit_gateway_default_route_table_propagation | Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | bool | `true` | no |
-| transit_gateway_id | The ID of gateway id | string | `` | no |
-| use_existing_transit_gateway_id | if use existing gateway id | bool | `false` | no |
+| transit_gateway_id | The ID of gateway id. | string | `` | no |
+| use_existing_transit_gateway_id | if use existing gateway id. | bool | `false` | no |
 | vpc_attachement_create | Whether or not to create the Transit Gateway VPC attachment. | bool | `false` | no |
 | vpc_id | Identifier of EC2 VPC. | string | `` | no |
 | vpn_ecmp_support | Whether VPN Equal Cost Multipath Protocol support is enabled. Valid values: disable, enable. Default value: enable. | string | `enable` | no |

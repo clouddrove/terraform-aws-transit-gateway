@@ -142,23 +142,23 @@ variable "destination_cidr_block" {
 variable "use_existing_transit_gateway_id" {
   type        = bool
   default     = false
-  description = "if use existing gateway id"
+  description = "if use existing gateway id."
 }
 
 variable "transit_gateway_id" {
   type        = string
   default     = ""
-  description = "The ID of gateway id"
+  description = "The ID of gateway id."
 }
 
 variable "resource_share_arn" {
   type        = string
   default     = ""
-  description = "ARN of RAM"
+  description = "ARN of RAM."
 }
 
 variable "aws_ram_resource_share_accepter" {
   type        = bool
   default     = false
-  description = "Accepter the RAM"
+  description = "Accepter the RAM."
 }
