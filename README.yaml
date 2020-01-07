@@ -1,0 +1,105 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name : Terraform AWS transit-gateway
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-transit-gateway
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v0.12-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
+    url: "LICENSE.md"
+
+#  description of this project
+description: |-
+  Terraform module which creates Transit Gateway, Resource Association, Principal Association, Resource Share, Transit Gateway VPC Attachment AWS.
+
+# extra content
+include:
+  - "terraform.md"
+
+# How to use this project
+usage : |-
+  Here are some examples of how you can use this module in your inventory structure:
+
+  ### Transit Gateway For Single Account
+  ```hcl
+    module "transit-gateway" {
+      source                          = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.0"
+
+     module "transit-gateway" {
+       source = "./../../"
+
+       name        = "transit-gateway"
+       application = "clouddrove"
+       environment = "test"
+       label_order = ["environment", "application", "name"]
+       enable      = true
+       tgw_create  = true
+
+       amazon_side_asn                 = 64512
+       auto_accept_shared_attachments  = "enable"
+       default_route_table_propagation = "enable"
+       description                     = "This transit Gateway create for testung purpose"
+
+       #TGW Share
+       resource_share_enable                    = false
+       resource_share_allow_external_principals = true
+       resource_share_account_ids               = ["XXXXXXXXXXXXX"]
+
+       # VPC Attachements
+       vpc_attachement_create = false # Enable After once create the subnets
+       vpc_id                 = module.vpc.vpc_id
+       destination_cidr_block = [ "10.0.0.0/8", "172.16.0.0/12"]
+
+     }
+
+     module "vpc-attachement" {
+       source      = "./../../"
+       name        = "transit-gateway"
+       application = "clouddrove"
+       environment = "test"
+       label_order = ["environment", "application", "name"]
+
+       # VPC Attachements
+       vpc_id                 = module.vpc-other.vpc_id
+       destination_cidr_block = ["10.0.0.0/8", "172.16.0.0/12"]
+       vpc_attachement_create = false # Enable After once create the subnets
+       use_existing_transit_gateway_id = true
+       transit_gateway_id              = module.transit-gateway.transit_gateway_id
+     }
+
+  ```
+  ### Transit Gateway Diffrent AWS Account
+  ```hcl
+      module "postgres" {
+        source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.2"
+        name        = "transit-gateway"
+        application = "clouddrove"
+        environment = "test"
+        label_order = ["environment", "application", "name"]
+
+        #Transit gateway invitation accepter
+        aws_ram_resource_share_accepter = true
+        resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+        # VPC Attachements
+        vpc_attachement_create          = false # Enable After once create the subnets
+        vpc_id                          = module.vpc.vpc_id
+        use_existing_transit_gateway_id = true
+        transit_gateway_id              = "tgw-XXXXXXXXXXX"
+        destination_cidr_block          = ["10.0.0.0/8", "172.16.0.0/12"]
+      }
+  ```
