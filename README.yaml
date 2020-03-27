@@ -37,7 +37,7 @@ usage : |-
   ### Transit Gateway For Single Account
   ```hcl
     module "transit-gateway" {
-       source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.0"
+       source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.1"
        name        = "transit-gateway"
        application = "clouddrove"
        environment = "test"
@@ -64,7 +64,7 @@ usage : |-
   ### Transit Gateway Diffrent AWS Account
   ```hcl
       module "transit-gateway" {
-        source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.2"
+        source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.1"
         name        = "transit-gateway"
         application = "clouddrove"
         environment = "test"
