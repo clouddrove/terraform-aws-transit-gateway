@@ -110,4 +110,3 @@ resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
-
