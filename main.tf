@@ -52,6 +52,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
       "Name" = format("%s-vpc-attachment", module.labels.id)
     }
   )
+
+  depends_on = [
+    data.aws_subnet_ids.main
+  ]
 }
 
 #Module      : AWS RAM RESOURCE SHARE
@@ -90,18 +94,24 @@ resource "aws_ram_resource_association" "main" {
 data "aws_route_tables" "main" {
   count  = var.enable && var.vpc_attachement_create ? 1 : 0
   vpc_id = var.vpc_id
+
+  filter {
+    name   = "tag:Application"
+    values = ["clouddrove"]
+  }
 }
 
 #Module      : AWS ROUTE
 #Description : Provides a resource to create a routing table entry (a route) in a VPC routing table.
 resource "aws_route" "main" {
-  count = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[0].ids)), ) * length(var.destination_cidr_block) : 0
+  count = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[0].ids)), ) : 0
 
   route_table_id         = element(distinct(sort(data.aws_route_tables.main[0].ids)), count.index)
   destination_cidr_block = element(distinct(sort(var.destination_cidr_block)), ceil(count.index / length(var.destination_cidr_block), ), )
   transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
   depends_on = [
     data.aws_route_tables.main,
+    data.aws_subnet_ids.main,
     aws_ec2_transit_gateway_vpc_attachment.main,
   ]
 }

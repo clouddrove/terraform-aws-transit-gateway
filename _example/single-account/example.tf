@@ -74,7 +74,7 @@ module "transit-gateway" {
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
-  destination_cidr_block = ["10.10.0.0/16", "10.20.0.0/16"]
+  destination_cidr_block = ["10.20.0.0/16"]
 
 }
 
@@ -87,7 +87,7 @@ module "vpc-attachement" {
 
   # VPC Attachements
   vpc_id                          = module.vpc-other.vpc_id
-  destination_cidr_block          = ["10.10.0.0/16", "10.20.0.0/16"]
+  destination_cidr_block          = ["10.10.0.0/16"]
   vpc_attachement_create          = false # Enable After once create the subnets
   use_existing_transit_gateway_id = true
   transit_gateway_id              = module.transit-gateway.transit_gateway_id
