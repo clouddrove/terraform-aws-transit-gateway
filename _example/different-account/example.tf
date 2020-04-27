@@ -48,6 +48,7 @@ module "transit-gateway" {
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
   destination_cidr_block = ["10.20.0.0/16"]
+}
 
 module "vpc-attachement" {
   source      = "./../../"
