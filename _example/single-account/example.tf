@@ -34,7 +34,7 @@ module "vpc-other" {
   environment = "test"
   label_order = ["environment", "application", "name"]
 
-  cidr_block = "10.20.0.0/16"
+  cidr_block = "192.168.0.0/16"
 }
 
 module "subnets-other" {
@@ -74,7 +74,7 @@ module "transit-gateway" {
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
-  destination_cidr_block = ["10.20.0.0/16"]
+  destination_cidr_block = ["192.168.0.0/16"]
 
 }
 

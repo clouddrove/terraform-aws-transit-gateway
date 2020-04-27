@@ -97,14 +97,14 @@ data "aws_route_tables" "main" {
 
   filter {
     name   = "tag:Application"
-    values = ["clouddrove"]
+    values = [var.application]
   }
 }
 
 #Module      : AWS ROUTE
 #Description : Provides a resource to create a routing table entry (a route) in a VPC routing table.
 resource "aws_route" "main" {
-  count = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[0].ids)), ) : 0
+  count = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[0].ids)), ) * length(var.destination_cidr_block) : 0
 
   route_table_id         = element(distinct(sort(data.aws_route_tables.main[0].ids)), count.index)
   destination_cidr_block = element(distinct(sort(var.destination_cidr_block)), ceil(count.index / length(var.destination_cidr_block), ), )
