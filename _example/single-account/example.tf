@@ -34,7 +34,7 @@ module "vpc-other" {
   environment = "test"
   label_order = ["environment", "application", "name"]
 
-  cidr_block = "10.20.0.0/16"
+  cidr_block = "192.168.0.0/16"
 }
 
 module "subnets-other" {
@@ -64,7 +64,7 @@ module "transit-gateway" {
   amazon_side_asn                 = 64512
   auto_accept_shared_attachments  = "enable"
   default_route_table_propagation = "enable"
-  description                     = "This transit Gateway create for testung purpose"
+  description                     = "This transit Gateway create for testing purpose"
 
   #TGW Share
   resource_share_enable                    = false
@@ -74,7 +74,7 @@ module "transit-gateway" {
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
-  destination_cidr_block                   = [ "10.0.0.0/8", "172.16.0.0/12"]
+  destination_cidr_block = ["192.168.0.0/16"]
 
 }
 
@@ -86,9 +86,9 @@ module "vpc-attachement" {
   label_order = ["environment", "application", "name"]
 
   # VPC Attachements
-  vpc_id                 = module.vpc-other.vpc_id
-  destination_cidr_block = ["10.0.0.0/8", "172.16.0.0/12"]
-  vpc_attachement_create = false # Enable After once create the subnets
+  vpc_id                          = module.vpc-other.vpc_id
+  destination_cidr_block          = ["10.10.0.0/16"]
+  vpc_attachement_create          = false # Enable After once create the subnets
   use_existing_transit_gateway_id = true
   transit_gateway_id              = module.transit-gateway.transit_gateway_id
 }

@@ -52,6 +52,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
       "Name" = format("%s-vpc-attachment", module.labels.id)
     }
   )
+
+  depends_on = [
+    data.aws_subnet_ids.main
+  ]
 }
 
 #Module      : AWS RAM RESOURCE SHARE
@@ -90,6 +94,11 @@ resource "aws_ram_resource_association" "main" {
 data "aws_route_tables" "main" {
   count  = var.enable && var.vpc_attachement_create ? 1 : 0
   vpc_id = var.vpc_id
+
+  filter {
+    name   = "tag:Application"
+    values = [var.application]
+  }
 }
 
 #Module      : AWS ROUTE
@@ -102,6 +111,7 @@ resource "aws_route" "main" {
   transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
   depends_on = [
     data.aws_route_tables.main,
+    data.aws_subnet_ids.main,
     aws_ec2_transit_gateway_vpc_attachment.main,
   ]
 }
@@ -110,4 +120,3 @@ resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
-

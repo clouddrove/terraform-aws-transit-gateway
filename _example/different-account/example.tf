@@ -44,5 +44,4 @@ module "transit-gateway" {
   use_existing_transit_gateway_id = true
   transit_gateway_id              = "tgw-XXXXXXXXXXX"
   destination_cidr_block          = ["10.0.0.0/8", "172.16.0.0/12"]
-
 }
