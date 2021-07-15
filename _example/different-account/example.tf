@@ -3,21 +3,22 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "git::https://github.com/clouddrove/terraform-aws-vpc.git?ref=tags/0.12.4"
+  source  = "clouddrove/vpc/aws"
+  version = "0.15.0"
 
   name        = "vpc"
-  application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["environment", "name"]
   cidr_block  = "172.16.0.0/16"
 }
 
 module "subnets" {
-  source      = "git::https://github.com/clouddrove/terraform-aws-subnet.git?ref=tags/0.12.4"
+  source  = "clouddrove/subnet/aws"
+  version = "0.15.0"
+
   name        = "subnets"
-  application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "name", "application"]
+  label_order = ["environment", "name"]
 
   availability_zones  = ["eu-west-1a", "eu-west-1b"]
   vpc_id              = module.vpc.vpc_id
@@ -25,14 +26,15 @@ module "subnets" {
   igw_id              = module.vpc.igw_id
   nat_gateway_enabled = false
   cidr_block          = module.vpc.vpc_cidr_block
+  ipv6_cidr_block     = module.vpc.ipv6_cidr_block
+
 }
 
 module "transit-gateway" {
   source      = "./../../"
   name        = "transit-gateway"
-  application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["environment", "name"]
 
   #Transit gateway invitation accepter
   aws_ram_resource_share_accepter = true
