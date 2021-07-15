@@ -5,6 +5,7 @@ variable "name" {
   default     = ""
   description = "Name  (e.g. `app` or `cluster`)."
 }
+
 variable "repository" {
   type        = string
   default     = "https://github.com/clouddrove/terraform-aws-transit-gateway"
@@ -15,6 +16,12 @@ variable "repository" {
     condition     = can(regex("^https://", var.repository))
     error_message = "The module-repo value must be a valid Git repo link."
   }
+}
+
+variable "application" {
+  type        = string
+  default     = ""
+  description = "Application (e.g. `cd` or `clouddrove`)."
 }
 
 variable "environment" {
