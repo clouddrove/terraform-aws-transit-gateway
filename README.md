@@ -14,7 +14,7 @@
 <p align="center">
 
 <a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v0.12-green" alt="Terraform">
+  <img src="https://img.shields.io/badge/Terraform-v0.15-green" alt="Terraform">
 </a>
 <a href="LICENSE.md">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licence">
@@ -51,7 +51,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 This module has a few dependencies: 
 
-- [Terraform 0.12](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
 - [github.com/stretchr/testify/assert](https://github.com/stretchr/testify)
 - [github.com/gruntwork-io/terratest/modules/terraform](https://github.com/gruntwork-io/terratest)
@@ -73,11 +73,11 @@ Here are some examples of how you can use this module in your inventory structur
 ### Transit Gateway For Single Account
 ```hcl
   module "transit-gateway" {
-     source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.1"
+
+     source        = "clouddrove/transit-gateway/aws"
      name        = "transit-gateway"
-     application = "clouddrove"
      environment = "test"
-     label_order = ["environment", "application", "name"]
+     label_order = ["environment", "name"]
      enable      = true
      tgw_create  = true
 
@@ -100,11 +100,11 @@ Here are some examples of how you can use this module in your inventory structur
 ### Transit Gateway Diffrent AWS Account
 ```hcl
     module "transit-gateway" {
-      source      = "git::https://github.com/clouddrove/terraform-aws-transit-gateway.git?ref=tags/0.12.1"
+
+      source        = "clouddrove/transit-gateway/aws"
       name        = "transit-gateway"
-      application = "clouddrove"
       environment = "test"
-      label_order = ["environment", "application", "name"]
+      label_order = ["environment", "name"]
 
       #Transit gateway invitation accepter
       aws_ram_resource_share_accepter = true
@@ -127,35 +127,35 @@ Here are some examples of how you can use this module in your inventory structur
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| amazon\_side\_asn | Private Autonomous System Number \(ASN\) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs. Default value: 64512. | number | `"64512"` | no |
-| application | Application \(e.g. `cd` or `clouddrove`\). | string | `""` | no |
-| attributes | Additional attributes \(e.g. `1`\). | list | `<list>` | no |
-| auto\_accept\_shared\_attachments | Whether resource attachment requests are automatically accepted. Valid values: disable, enable. Default value: disable. | string | `"disable"` | no |
-| aws\_ram\_resource\_share\_accepter | Accepter the RAM. | bool | `"false"` | no |
-| default\_route\_table\_association | Whether resource attachments are automatically associated with the default association route table. Valid values: disable, enable. Default value: enable. | string | `"enable"` | no |
-| default\_route\_table\_propagation | Whether resource attachments automatically propagate routes to the default propagation route table. Valid values: disable, enable. Default value: enable. | string | `"enable"` | no |
-| description | Description of the EC2 Transit Gateway | string | `""` | no |
-| destination\_cidr\_block | The destination CIDR block. | list | `<list>` | no |
-| enable | Whether or not to enable the entire module or not. | string | `"true"` | no |
-| environment | Environment \(e.g. `prod`, `dev`, `staging`\). | string | `""` | no |
-| label\_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | string | `"anmol@clouddrove.com"` | no |
-| name | Name  \(e.g. `app` or `cluster`\). | string | `""` | no |
-| resource\_share\_account\_ids | Ids of the account where the Transit Gateway should be shared. | list | `<list>` | no |
-| resource\_share\_allow\_external\_principals | Whether or not to allow external principals for the Resource Share for the Transit Gateway. | bool | `"true"` | no |
-| resource\_share\_arn | ARN of RAM. | string | `""` | no |
-| resource\_share\_enable | Whether or not to create a Resource Share for the Transit Gateway. | bool | `"false"` | no |
-| subnet\_ids | Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway. | list | `<list>` | no |
-| tags | Additional tags \(e.g. map\(`BusinessUnit`,`XYZ`\). | map | `<map>` | no |
-| tgw\_create | Whether or not to create a Transit Gateway. | bool | `"false"` | no |
-| transit\_gateway\_default\_route\_table\_association | Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | bool | `"true"` | no |
-| transit\_gateway\_default\_route\_table\_propagation | Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | bool | `"true"` | no |
-| transit\_gateway\_id | The ID of gateway id. | string | `""` | no |
-| use\_existing\_transit\_gateway\_id | if use existing gateway id. | bool | `"false"` | no |
-| vpc\_attachement\_create | Whether or not to create the Transit Gateway VPC attachment. | bool | `"false"` | no |
-| vpc\_id | Identifier of EC2 VPC. | string | `""` | no |
-| vpn\_ecmp\_support | Whether VPN Equal Cost Multipath Protocol support is enabled. Valid values: disable, enable. Default value: enable. | string | `"enable"` | no |
+|------|-------------|------|---------|:--------:|
+| amazon\_side\_asn | Private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs. Default value: 64512. | `number` | `64512` | no |
+| attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
+| auto\_accept\_shared\_attachments | Whether resource attachment requests are automatically accepted. Valid values: disable, enable. Default value: disable. | `string` | `"disable"` | no |
+| aws\_ram\_resource\_share\_accepter | Accepter the RAM. | `bool` | `false` | no |
+| default\_route\_table\_association | Whether resource attachments are automatically associated with the default association route table. Valid values: disable, enable. Default value: enable. | `string` | `"enable"` | no |
+| default\_route\_table\_propagation | Whether resource attachments automatically propagate routes to the default propagation route table. Valid values: disable, enable. Default value: enable. | `string` | `"enable"` | no |
+| description | Description of the EC2 Transit Gateway | `string` | `""` | no |
+| destination\_cidr\_block | The destination CIDR block. | `list(any)` | `[]` | no |
+| enable | Whether or not to enable the entire module or not. | `bool` | `true` | no |
+| environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
+| label\_order | Label order, e.g. `name`. | `list(any)` | `[]` | no |
+| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | `string` | `"anmol@clouddrove.com"` | no |
+| name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
+| repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-transit-gateway"` | no |
+| resource\_share\_account\_ids | Ids of the account where the Transit Gateway should be shared. | `list(any)` | `[]` | no |
+| resource\_share\_allow\_external\_principals | Whether or not to allow external principals for the Resource Share for the Transit Gateway. | `bool` | `true` | no |
+| resource\_share\_arn | ARN of RAM. | `string` | `""` | no |
+| resource\_share\_enable | Whether or not to create a Resource Share for the Transit Gateway. | `bool` | `false` | no |
+| subnet\_ids | Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway. | `list(any)` | `[]` | no |
+| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(any)` | `{}` | no |
+| tgw\_create | Whether or not to create a Transit Gateway. | `bool` | `false` | no |
+| transit\_gateway\_default\_route\_table\_association | Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | `bool` | `true` | no |
+| transit\_gateway\_default\_route\_table\_propagation | Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | `bool` | `true` | no |
+| transit\_gateway\_id | The ID of gateway id. | `string` | `""` | no |
+| use\_existing\_transit\_gateway\_id | if use existing gateway id. | `bool` | `false` | no |
+| vpc\_attachement\_create | Whether or not to create the Transit Gateway VPC attachment. | `bool` | `false` | no |
+| vpc\_id | Identifier of EC2 VPC. | `string` | `""` | no |
+| vpn\_ecmp\_support | Whether VPN Equal Cost Multipath Protocol support is enabled. Valid values: disable, enable. Default value: enable. | `string` | `"enable"` | no |
 
 ## Outputs
 
