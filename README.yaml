@@ -67,9 +67,8 @@ usage : |-
 
         source        = "clouddrove/transit-gateway/aws"
         name        = "transit-gateway"
-        application = "clouddrove"
         environment = "test"
-        label_order = ["environment", "application", "name"]
+        label_order = ["environment", "name"]
 
         #Transit gateway invitation accepter
         aws_ram_resource_share_accepter = true
