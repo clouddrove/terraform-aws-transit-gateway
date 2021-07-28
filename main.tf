@@ -98,6 +98,8 @@ data "aws_route_tables" "main" {
 
   filter {
     name   = "tag:Application"
+    values = [var.environment]
+
   }
 }
 
