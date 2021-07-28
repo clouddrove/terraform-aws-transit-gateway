@@ -6,10 +6,11 @@ variable "name" {
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
-variable "application" {
+variable "repository" {
   type        = string
-  default     = ""
-  description = "Application (e.g. `cd` or `clouddrove`)."
+  default     = "https://github.com/clouddrove/terraform-aws-transit-gateway"
+  description = "Terraform current module repo"
+
 }
 
 variable "environment" {
@@ -19,19 +20,19 @@ variable "environment" {
 }
 
 variable "label_order" {
-  type        = list
+  type        = list(any)
   default     = []
-  description = "Label order, e.g. `name`,`application`."
+  description = "Label order, e.g. `name`."
 }
 
 variable "attributes" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Additional attributes (e.g. `1`)."
 }
 
 variable "tags" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
@@ -97,7 +98,7 @@ variable "vpc_attachement_create" {
 }
 
 variable "subnet_ids" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway."
 }
@@ -122,7 +123,7 @@ variable "transit_gateway_default_route_table_propagation" {
 
 # Resource Share
 variable "resource_share_account_ids" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Ids of the account where the Transit Gateway should be shared."
 }
@@ -140,7 +141,7 @@ variable "resource_share_enable" {
 }
 
 variable "destination_cidr_block" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "The destination CIDR block."
 }
