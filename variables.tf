@@ -1,16 +1,137 @@
-#Module      : LABEL
-#Description : Terraform label module variables.
-variable "name" {
-  type        = string
-  default     = ""
-  description = "Name  (e.g. `app` or `cluster`)."
+variable "create_tgw" {
+  description = "Controls if TGW should be created (it affects almost all resources)"
+  type        = bool
+  default     = true
 }
 
-variable "repository" {
+variable "name" {
+  description = "Name to be used on all the resources as identifier"
   type        = string
-  default     = "https://github.com/clouddrove/terraform-aws-transit-gateway"
-  description = "Terraform current module repo"
+  default     = ""
+}
 
+variable "amazon_side_asn" {
+  description = "The Autonomous System Number (ASN) for the Amazon side of the gateway. By default the TGW is created with the current default Amazon ASN."
+  type        = string
+  default     = "64512"
+}
+
+variable "enable_auto_accept_shared_attachments" {
+  description = "Whether resource attachment requests are automatically accepted"
+  type        = bool
+  default     = false
+}
+
+variable "enable_default_route_table_association" {
+  description = "Whether resource attachments are automatically associated with the default association route table"
+  type        = bool
+  default     = true
+}
+
+variable "enable_default_route_table_propagation" {
+  description = "Whether resource attachments automatically propagate routes to the default propagation route table"
+  type        = bool
+  default     = true
+}
+
+variable "description" {
+  description = "Description of the EC2 Transit Gateway"
+  type        = string
+  default     = null
+}
+
+variable "enable_dns_support" {
+  description = "Should be true to enable DNS support in the TGW"
+  type        = bool
+  default     = true
+}
+
+variable "enable_vpn_ecmp_support" {
+  description = "Whether VPN Equal Cost Multipath Protocol support is enabled"
+  type        = bool
+  default     = true
+}
+
+# VPC attachments
+variable "vpc_attachments" {
+  description = "Maps of maps of VPC details to attach to TGW. Type 'any' to disable type validation by Terraform."
+  type        = any
+  default     = {}
+}
+
+# TGW Route Table association and propagation
+variable "transit_gateway_route_table_id" {
+  description = "Identifier of EC2 Transit Gateway Route Table to use with the Target Gateway when reusing it between multiple TGWs"
+  type        = string
+  default     = null
+}
+
+# Tags
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "tgw_tags" {
+  description = "Additional tags for the TGW"
+  type        = map(string)
+  default     = {}
+}
+
+variable "tgw_route_table_tags" {
+  description = "Additional tags for the TGW route table"
+  type        = map(string)
+  default     = {}
+}
+
+variable "tgw_default_route_table_tags" {
+  description = "Additional tags for the Default TGW route table"
+  type        = map(string)
+  default     = {}
+}
+
+variable "tgw_vpc_attachment_tags" {
+  description = "Additional tags for VPC attachments"
+  type        = map(string)
+  default     = {}
+}
+
+# TGW resource sharing
+variable "share_tgw" {
+  description = "Whether to share your transit gateway with other accounts"
+  type        = bool
+  default     = true
+}
+
+variable "ram_name" {
+  description = "The name of the resource share of TGW"
+  type        = string
+  default     = ""
+}
+
+variable "ram_allow_external_principals" {
+  description = "Indicates whether principals outside your organization can be associated with a resource share."
+  type        = bool
+  default     = false
+}
+
+variable "ram_tags" {
+  description = "Additional tags for the RAM"
+  type        = map(string)
+  default     = {}
+}
+
+variable "ram_principals" {
+  description = "A list of principals to share TGW with. Possible values are an AWS account ID, an AWS Organizations Organization ARN, or an AWS Organizations Organization Unit ARN"
+  type        = list(string)
+  default     = []
+}
+
+variable "ram_resource_share_arn" {
+  description = "ARN of RAM resource share"
+  type        = string
+  default     = ""
 }
 
 variable "environment" {
@@ -22,150 +143,11 @@ variable "environment" {
 variable "label_order" {
   type        = list(any)
   default     = []
-  description = "Label order, e.g. `name`."
-}
-
-variable "attributes" {
-  type        = list(any)
-  default     = []
-  description = "Additional attributes (e.g. `1`)."
-}
-
-variable "tags" {
-  type        = map(any)
-  default     = {}
-  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
+  description = "Label order, e.g. `name`,`application`."
 }
 
 variable "managedby" {
   type        = string
-  default     = "anmol@clouddrove.com"
-  description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
-}
-
-variable "enable" {
-  description = "Whether or not to enable the entire module or not."
-  default     = true
-}
-
-# Transit Gateway
-variable "vpn_ecmp_support" {
-  type        = string
-  default     = "enable"
-  description = "Whether VPN Equal Cost Multipath Protocol support is enabled. Valid values: disable, enable. Default value: enable."
-}
-
-variable "amazon_side_asn" {
-  type        = number
-  default     = 64512
-  description = "Private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs. Default value: 64512."
-}
-
-variable "default_route_table_association" {
-  type        = string
-  default     = "enable"
-  description = "Whether resource attachments are automatically associated with the default association route table. Valid values: disable, enable. Default value: enable."
-}
-
-variable "auto_accept_shared_attachments" {
-  type        = string
-  default     = "disable"
-  description = "Whether resource attachment requests are automatically accepted. Valid values: disable, enable. Default value: disable."
-}
-
-variable "default_route_table_propagation" {
-  type        = string
-  default     = "enable"
-  description = "Whether resource attachments automatically propagate routes to the default propagation route table. Valid values: disable, enable. Default value: enable."
-}
-
-variable "description" {
-  type        = string
   default     = ""
-  description = "Description of the EC2 Transit Gateway"
-}
-
-variable "tgw_create" {
-  type        = bool
-  default     = false
-  description = "Whether or not to create a Transit Gateway."
-}
-
-variable "vpc_attachement_create" {
-  type        = bool
-  default     = false
-  description = "Whether or not to create the Transit Gateway VPC attachment."
-}
-
-variable "subnet_ids" {
-  type        = list(any)
-  default     = []
-  description = "Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway."
-}
-
-variable "vpc_id" {
-  type        = string
-  default     = ""
-  description = "Identifier of EC2 VPC."
-}
-
-variable "transit_gateway_default_route_table_association" {
-  type        = bool
-  default     = true
-  description = "Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true."
-}
-
-variable "transit_gateway_default_route_table_propagation" {
-  type        = bool
-  default     = true
-  description = "Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true."
-}
-
-# Resource Share
-variable "resource_share_account_ids" {
-  type        = list(any)
-  default     = []
-  description = "Ids of the account where the Transit Gateway should be shared."
-}
-
-variable "resource_share_allow_external_principals" {
-  type        = bool
-  default     = true
-  description = "Whether or not to allow external principals for the Resource Share for the Transit Gateway."
-}
-
-variable "resource_share_enable" {
-  type        = bool
-  default     = false
-  description = "Whether or not to create a Resource Share for the Transit Gateway."
-}
-
-variable "destination_cidr_block" {
-  type        = list(any)
-  default     = []
-  description = "The destination CIDR block."
-}
-
-variable "use_existing_transit_gateway_id" {
-  type        = bool
-  default     = false
-  description = "if use existing gateway id."
-}
-
-variable "transit_gateway_id" {
-  type        = string
-  default     = ""
-  description = "The ID of gateway id."
-}
-
-variable "resource_share_arn" {
-  type        = string
-  default     = ""
-  description = "ARN of RAM."
-}
-
-variable "aws_ram_resource_share_accepter" {
-  type        = bool
-  default     = false
-  description = "Accepter the RAM."
+  description = "ManagedBy, eg 'beyond'"
 }
