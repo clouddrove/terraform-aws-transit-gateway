@@ -90,3 +90,9 @@ output "ram_principal_association_id" {
   description = "The Amazon Resource Name (ARN) of the Resource Share and the principal, separated by a comma"
   value       = element(concat(aws_ram_principal_association.this.*.id, [""]), 0)
 }
+
+# output "rtb-vpc" {
+
+#   value = data.aws_route_tables.vpc-transit
+
+# }

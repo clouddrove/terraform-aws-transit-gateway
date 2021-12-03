@@ -90,3 +90,8 @@ output "ram_principal_association_id" {
   description = "The Amazon Resource Name (ARN) of the Resource Share and the principal, separated by a comma"
   value       = module.tgw.ram_principal_association_id
 }
+
+
+# output "rtb-vpc" {
+#   value = module.tgw.rtb-vpc
+# }

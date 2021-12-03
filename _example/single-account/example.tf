@@ -13,6 +13,8 @@ module "tgw" {
   description                           = "My TGW shared with several other AWS accounts"
   amazon_side_asn                       = 64532
   enable_auto_accept_shared_attachments = true # When "true" there is no need for RAM resources if using multiple AWS accounts
+
+
   vpc_attachments = {
 
     vpc1 = {
@@ -35,8 +37,10 @@ module "tgw" {
       ]
     },
     vpc2 = {
-      vpc_id     = module.vpc2.vpc_id               #data.aws_vpc.default.id  
-      subnet_ids = module.subnets2.public_subnet_id #data.aws_subnet_ids.this.ids 
+      vpc_id                                          = module.vpc2.vpc_id               #data.aws_vpc.default.id  
+      subnet_ids                                      = module.subnets2.public_subnet_id #data.aws_subnet_ids.this.ids 
+      transit_gateway_default_route_table_association = true
+      transit_gateway_default_route_table_propagation = true
 
       tgw_routes = [
         {

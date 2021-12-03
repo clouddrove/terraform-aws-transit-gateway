@@ -20,6 +20,8 @@ locals {
     var.tgw_default_route_table_tags,
   )
 
+
+
   vpc_route_table_destination_cidr = flatten([
     for k, v in var.vpc_attachments : [
       for rtb_id in lookup(v, "vpc_route_table_ids", []) : {
@@ -104,8 +106,37 @@ resource "aws_route" "this" {
 
   route_table_id         = each.key
   destination_cidr_block = each.value
-  transit_gateway_id     = aws_ec2_transit_gateway.this[0].id
+  transit_gateway_id     = aws_ec2_transit_gateway.this.*.id
 }
+
+data "aws_route_tables" "vpc-transit" {
+  for_each = var.vpc_attachments
+  vpc_id   = each.value["vpc_id"]
+}
+
+# locals {
+#   route-table-list= flatten([
+#     for key ,value in var.vpc_attachments : [
+
+#     ]
+#   ])
+# }
+
+# resource "aws_route" "vpc-transit" {
+#   for_each = var.vpc_attachments
+#   count = length(data.aws_route_tables.vpc-transit[each.key].ids)
+#   route_table_id = tolist(data.aws_route_tables.vpc-transit[each.key].ids)[count.index]
+#   transit_gateway_id     = aws_ec2_transit_gateway.this.*.id
+
+#   dynamic "destination_cidr_block" {
+#     for_each = { for x in local.vpc_route_table_destination_cidr : x.rtb_id => x.cidr }
+#     content {
+#       destination_cidr_block = each.value
+#     }
+
+#   }
+
+# }
 
 #Module      : TRANSIT GATEWAY VPC ATTACHMENT
 #Description : Get information on an EC2 Transit Gateway VPC Attachment.
