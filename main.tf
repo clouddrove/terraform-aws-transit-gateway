@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   count = var.enable && var.vpc_attachement_create ? 1 : 0
 
   transit_gateway_id                              = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
-  subnet_ids                                      = element(data.aws_subnet_ids.main.*.ids, count.index)
+  subnet_ids                                      = var.subnet_ids
   vpc_id                                          = var.vpc_id
   transit_gateway_default_route_table_association = var.transit_gateway_default_route_table_association
   transit_gateway_default_route_table_propagation = var.transit_gateway_default_route_table_propagation
@@ -96,11 +96,7 @@ data "aws_route_tables" "main" {
   count  = var.enable && var.vpc_attachement_create ? 1 : 0
   vpc_id = var.vpc_id
 
-  filter {
-    name   = "tag:Application"
-    values = [var.environment]
-
-  }
+  
 }
 
 #Module      : AWS ROUTE

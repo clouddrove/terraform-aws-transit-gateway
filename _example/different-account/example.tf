@@ -39,7 +39,8 @@ module "transit-gateway" {
   #Transit gateway invitation accepter
   aws_ram_resource_share_accepter = true
   resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
-
+  subnet_ids                      = module.subnets.private_subnet_id
+  
   # VPC Attachements
   vpc_attachement_create          = false # Enable After once create the subnets
   vpc_id                          = module.vpc.vpc_id

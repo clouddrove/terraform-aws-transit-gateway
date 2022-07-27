@@ -73,7 +73,8 @@ module "transit-gateway" {
   resource_share_enable                    = false
   resource_share_allow_external_principals = true
   resource_share_account_ids               = ["XXXXXXXXXXXXX"]
-
+  subnet_ids                               = module.subnets.private_subnet_id
+  
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
