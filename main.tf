@@ -33,10 +33,6 @@ resource "aws_ec2_transit_gateway" "main" {
 }
 
 
-#data "aws_subnet" "main" {
-#  id = var.subnet_id
-#}
-
 #Module      : TRANSIT GATEWAY VPC ATTACHMENT
 #Description : Get information on an EC2 Transit Gateway VPC Attachment.
 resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
@@ -54,9 +50,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
     }
   )
 
-#  depends_on = [
-#    data.aws_subnet.main
-#  ]
+
 }
 
 #Module      : AWS RAM RESOURCE SHARE
