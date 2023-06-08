@@ -32,10 +32,6 @@ resource "aws_ec2_transit_gateway" "main" {
   tags                            = module.labels.tags
 }
 
-data "aws_subnet_ids" "main" {
-  count  = var.enable && var.vpc_attachement_create ? 1 : 0
-  vpc_id = var.vpc_id
-}
 
 #Module      : TRANSIT GATEWAY VPC ATTACHMENT
 #Description : Get information on an EC2 Transit Gateway VPC Attachment.
@@ -54,9 +50,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
     }
   )
 
-  depends_on = [
-    data.aws_subnet_ids.main
-  ]
+
 }
 
 #Module      : AWS RAM RESOURCE SHARE
@@ -109,7 +103,6 @@ resource "aws_route" "main" {
   transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
   depends_on = [
     data.aws_route_tables.main,
-    data.aws_subnet_ids.main,
     aws_ec2_transit_gateway_vpc_attachment.main,
   ]
 }
