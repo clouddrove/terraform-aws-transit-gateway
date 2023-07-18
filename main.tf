@@ -1,11 +1,6 @@
-# Managed By : CloudDrove
-# Description : This Script is used to create Transit Gateway.
-# Copyright @ CloudDrove. All Right Reserved.
-
-#Module      : Label
-#Description : This terraform module is designed to generate consistent label names and tags
-#              for resources. You can use terraform-labels to implement a strict naming
-#              convention.
+##------------------------------------------------------------------------------
+## Labels module callled that will be used for naming and tags.
+##------------------------------------------------------------------------------
 module "labels" {
   source  = "clouddrove/labels/aws"
   version = "1.3.0"
@@ -18,8 +13,9 @@ module "labels" {
   label_order = var.label_order
 }
 
-#Module      : TRANSIT GATEWAY
-#Description : Manages an EC2 Transit Gateway.
+##------------------------------------------------------------------------------
+## A transit gateway acts as a Regional virtual router for traffic flowing between your virtual private clouds (VPCs) and on-premises networks.
+##------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway" "main" {
   count = var.enable && var.tgw_create ? 1 : 0
 
@@ -32,9 +28,9 @@ resource "aws_ec2_transit_gateway" "main" {
   tags                            = module.labels.tags
 }
 
-
-#Module      : TRANSIT GATEWAY VPC ATTACHMENT
-#Description : Get information on an EC2 Transit Gateway VPC Attachment.
+##------------------------------------------------------------------------------
+## Get information on an EC2 Transit Gateway VPC Attachment.
+##------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   count = var.enable && var.vpc_attachement_create ? 1 : 0
 
@@ -49,12 +45,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
       "Name" = format("%s-vpc-attachment", module.labels.id)
     }
   )
-
-
 }
 
-#Module      : AWS RAM RESOURCE SHARE
-#Description : Manages a Resource Access Manager (RAM) Resource Share. To association principals with the share.
+##------------------------------------------------------------------------------
+## You can use AWS Resource Access Manager (RAM) to share a transit gateway for VPC attachments across accounts or across your organization in AWS.
+##------------------------------------------------------------------------------
 resource "aws_ram_resource_share" "main" {
   count = var.enable && var.resource_share_enable ? 1 : 0
 
@@ -68,8 +63,9 @@ resource "aws_ram_resource_share" "main" {
   )
 }
 
-#Module      : RAM PRINCIPAL ASSOCIATION
-#Description : Provides a Resource Access Manager (RAM) principal association.
+##------------------------------------------------------------------------------
+## Provides a Resource Access Manager (RAM) principal association. Depending if RAM Sharing with AWS Organizations is enabled, the RAM behavior with different principal types changes.
+##------------------------------------------------------------------------------
 resource "aws_ram_principal_association" "main" {
   count = var.enable && var.resource_share_enable ? length(var.resource_share_account_ids) : 0
 
@@ -77,8 +73,9 @@ resource "aws_ram_principal_association" "main" {
   resource_share_arn = join("", aws_ram_resource_share.main.*.id)
 }
 
-#Module      : RAM ASSOCIATION
-#Description : Manages a Resource Access Manager (RAM) Resource Association.
+##------------------------------------------------------------------------------
+## The Resource Association in AWS RAM can be configured in Terraform with the resource name aws_ram_resource_association.
+##------------------------------------------------------------------------------
 resource "aws_ram_resource_association" "main" {
   count = var.enable && var.resource_share_enable ? 1 : 0
 
@@ -89,12 +86,11 @@ resource "aws_ram_resource_association" "main" {
 data "aws_route_tables" "main" {
   count  = var.enable && var.vpc_attachement_create ? 1 : 0
   vpc_id = var.vpc_id
-
-  
 }
 
-#Module      : AWS ROUTE
-#Description : Provides a resource to create a routing table entry (a route) in a VPC routing table.
+##------------------------------------------------------------------------------
+## Provides a resource to create a routing table entry (a route) in a VPC routing table.
+##------------------------------------------------------------------------------
 resource "aws_route" "main" {
   count = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[0].ids)), ) * length(var.destination_cidr_block) : 0
 
@@ -107,7 +103,48 @@ resource "aws_route" "main" {
   ]
 }
 
+##------------------------------------------------------------------------------
+## An AWS Transit Gateway Route Table includes dynamic routes, static routes and blackhole routes.
+##------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route_table" "this" {
+  count = var.tgw_create ? 1 : 0
+
+  transit_gateway_id = aws_ec2_transit_gateway.main[0].id
+
+  tags = merge(
+    module.labels.tags,
+    { Name = var.name },
+  )
+}
+
+##------------------------------------------------------------------------------
+## The Transit Gateway Route in Amazon EC2 can be configured in Terraform with the resource name aws_ec2_transit_gateway_route.
+##------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route" "this" {
+  count = var.vpc_attachement_create ? 1 : 0
+
+  destination_cidr_block = "0.0.0.0/0"
+  blackhole              = true
+
+  transit_gateway_route_table_id = aws_ec2_transit_gateway.main.*.association_default_route_table_id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.*.id
+}
+
+##------------------------------------------------------------------------------
+## Associates the specified attachment with the specified transit gateway route table. You can associate one route table with an attachment.
+##------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route_table_association" "this" {
+  count = var.vpc_attachement_create ? 1 : 0
+
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.*.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.this[0].id
+}
+
+##------------------------------------------------------------------------------
+## Associates the specified attachment with the specified transit gateway route table. You can associate one route table with an attachment.
+##------------------------------------------------------------------------------
 resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
+

@@ -1,7 +1,13 @@
+##------------------------------------------------------------------------------
+## Provider block added, Use the Amazon Web Services (AWS) provider to interact with the many resources supported by AWS.
+##------------------------------------------------------------------------------
 provider "aws" {
   region = "eu-west-1"
 }
 
+##------------------------------------------------------------------------------
+## A VPC is a virtual network that closely resembles a traditional network that you'd operate in your own data center.
+##------------------------------------------------------------------------------
 module "vpc" {
   source  = "clouddrove/vpc/aws"
   version = "1.3.1"
@@ -12,6 +18,9 @@ module "vpc" {
   cidr_block  = "10.10.0.0/16"
 }
 
+##------------------------------------------------------------------------------
+## A subnet is a range of IP addresses in your VPC.
+##------------------------------------------------------------------------------
 module "subnets" {
   source  = "clouddrove/subnet/aws"
   version = "1.3.0"
@@ -28,6 +37,9 @@ module "subnets" {
   ipv6_cidr_block     = module.vpc.ipv6_cidr_block
 }
 
+##------------------------------------------------------------------------------
+## A VPC is a virtual network that closely resembles a traditional network that you'd operate in your own data center.
+##------------------------------------------------------------------------------
 module "vpc-other" {
   source  = "clouddrove/vpc/aws"
   version = "1.3.1"
@@ -39,8 +51,11 @@ module "vpc-other" {
   cidr_block = "192.168.0.0/16"
 }
 
+##------------------------------------------------------------------------------
+## A subnet is a range of IP addresses in your VPC.
+##------------------------------------------------------------------------------
 module "subnets-other" {
-  source              = "clouddrove/subnet/aws"
+  source  = "clouddrove/subnet/aws"
   version = "1.3.0"
 
   name                = "subnets"
@@ -56,6 +71,9 @@ module "subnets-other" {
 
 }
 
+##------------------------------------------------------------------------------
+## transit-gateway module call.
+##------------------------------------------------------------------------------
 module "transit-gateway" {
   source = "./../../"
 
@@ -75,13 +93,16 @@ module "transit-gateway" {
   resource_share_allow_external_principals = true
   resource_share_account_ids               = ["XXXXXXXXXXXXX"]
   subnet_ids                               = module.subnets.private_subnet_id
-  
+
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
   destination_cidr_block = ["192.168.0.0/16"]
 }
 
+##------------------------------------------------------------------------------
+## vpc-attachement module call.
+##------------------------------------------------------------------------------
 module "vpc-attachement" {
   source      = "./../../"
   name        = "transit-gateway"

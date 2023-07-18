@@ -10,7 +10,6 @@ variable "repository" {
   type        = string
   default     = "https://github.com/clouddrove/terraform-aws-transit-gateway"
   description = "Terraform current module repo"
-
 }
 
 variable "environment" {
