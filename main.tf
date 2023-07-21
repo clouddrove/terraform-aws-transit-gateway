@@ -69,7 +69,7 @@ resource "aws_ram_resource_share" "main" {
 resource "aws_ram_principal_association" "main" {
   count = var.enable && var.resource_share_enable ? length(var.resource_share_account_ids) : 0
 
-  principal = element(var.resource_share_account_ids, count.index)
+  principal          = element(var.resource_share_account_ids, count.index)
   resource_share_arn = join("", aws_ram_resource_share.main.*.id)
 }
 
