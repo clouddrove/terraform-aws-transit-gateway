@@ -69,7 +69,7 @@ resource "aws_ram_resource_share" "main" {
 resource "aws_ram_principal_association" "main" {
   count = var.enable && var.resource_share_enable ? length(var.resource_share_account_ids) : 0
 
-  principal          = element(var.resource_share_account_ids, count.index)
+  principal = element(var.resource_share_account_ids, count.index)
   resource_share_arn = join("", aws_ram_resource_share.main.*.id)
 }
 
@@ -79,8 +79,8 @@ resource "aws_ram_principal_association" "main" {
 resource "aws_ram_resource_association" "main" {
   count = var.enable && var.resource_share_enable ? 1 : 0
 
-  resource_arn       = join("", aws_ec2_transit_gateway.main.*.arn)
-  resource_share_arn = join("", aws_ram_resource_share.main.*.id)
+  resource_arn       = aws_ec2_transit_gateway.main[0].arn
+  resource_share_arn = aws_ram_resource_share.main[0].arn
 }
 
 data "aws_route_tables" "main" {
@@ -118,33 +118,9 @@ resource "aws_ec2_transit_gateway_route_table" "this" {
 }
 
 ##------------------------------------------------------------------------------
-## The Transit Gateway Route in Amazon EC2 can be configured in Terraform with the resource name aws_ec2_transit_gateway_route.
-##------------------------------------------------------------------------------
-resource "aws_ec2_transit_gateway_route" "this" {
-  count = var.vpc_attachement_create ? 1 : 0
-
-  destination_cidr_block = "0.0.0.0/0"
-  blackhole              = true
-
-  transit_gateway_route_table_id = aws_ec2_transit_gateway.main.*.association_default_route_table_id
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.*.id
-}
-
-##------------------------------------------------------------------------------
-## Associates the specified attachment with the specified transit gateway route table. You can associate one route table with an attachment.
-##------------------------------------------------------------------------------
-resource "aws_ec2_transit_gateway_route_table_association" "this" {
-  count = var.vpc_attachement_create ? 1 : 0
-
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.*.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.this[0].id
-}
-
-##------------------------------------------------------------------------------
 ## Associates the specified attachment with the specified transit gateway route table. You can associate one route table with an attachment.
 ##------------------------------------------------------------------------------
 resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
-

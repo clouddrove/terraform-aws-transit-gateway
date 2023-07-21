@@ -37,7 +37,7 @@ module "transit-gateway" {
   label_order = ["environment", "name"]
 
   #Transit gateway invitation accepter
-  aws_ram_resource_share_accepter = true
+  aws_ram_resource_share_accepter = false
   resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
   subnet_ids                      = module.subnets.private_subnet_id
 
