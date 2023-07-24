@@ -12,8 +12,8 @@ module "vpc" {
   source  = "clouddrove/vpc/aws"
   version = "1.3.1"
 
-  name        = "vpc1"
-  environment = "transit-gateway"
+  name        = "vpc"
+  environment = "test"
   label_order = ["environment", "name"]
   cidr_block  = "10.10.0.0/16"
 }
@@ -25,8 +25,8 @@ module "subnets" {
   source  = "clouddrove/subnet/aws"
   version = "1.3.0"
 
-  name                = "subnets1"
-  environment         = "transit-gateway"
+  name                = "subnets"
+  environment         = "test"
   label_order         = ["environment", "name"]
   availability_zones  = ["eu-west-2a", "eu-west-2b"]
   vpc_id              = module.vpc.vpc_id
@@ -44,8 +44,8 @@ module "vpc-other" {
   source  = "clouddrove/vpc/aws"
   version = "1.3.1"
 
-  name        = "vpc2"
-  environment = "transit-gateway"
+  name        = "vpc"
+  environment = "test"
   label_order = ["environment", "name"]
 
   cidr_block = "192.168.0.0/16"
@@ -58,8 +58,8 @@ module "subnets-other" {
   source  = "clouddrove/subnet/aws"
   version = "1.3.0"
 
-  name                = "subnets2"
-  environment         = "transit-gateway"
+  name                = "subnet"
+  environment         = "test"
   label_order         = ["environment", "name"]
   availability_zones  = ["eu-west-2a", "eu-west-2b"]
   vpc_id              = module.vpc-other.vpc_id
@@ -88,7 +88,7 @@ module "transit-gateway" {
   #TGW Share
   resource_share_enable                    = false
   resource_share_allow_external_principals = true
-  resource_share_account_ids               = ["924144197303"]
+  resource_share_account_ids               = ["XXXXXXXXXXXXX"]
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id

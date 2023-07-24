@@ -25,6 +25,9 @@ resource "aws_ec2_transit_gateway" "main" {
   default_route_table_association = var.default_route_table_association
   auto_accept_shared_attachments  = var.auto_accept_shared_attachments
   default_route_table_propagation = var.default_route_table_propagation
+  transit_gateway_cidr_blocks     = var.transit_gateway_cidr_blocks
+  dns_support                     = var.dns_support
+  multicast_support               = var.multicast_support
   tags                            = module.labels.tags
 }
 
@@ -124,3 +127,9 @@ resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
+
+#resource "aws_ec2_transit_gateway_route_table_propagation" "this" {
+#  count                          = var.enable && var.vpc_attachement_create ? 1 : 0
+#  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main[0].id
+#  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.this[0].id
+#}

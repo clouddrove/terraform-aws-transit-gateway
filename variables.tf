@@ -168,3 +168,21 @@ variable "aws_ram_resource_share_accepter" {
   default     = false
   description = "Accepter the RAM."
 }
+
+variable "transit_gateway_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "One or more IPv4 or IPv6 CIDR blocks for the transit gateway. Must be a size /24 CIDR block or larger for IPv4, or a size /64 CIDR block or larger for IPv6"
+}
+
+variable "dns_support" {
+  type        = string
+  default     = "enable"
+  description = "Should be true to enable DNS support in the TGW"
+}
+
+variable "multicast_support" {
+  type        = string
+  default     = "enable"
+  description = "Whether multicast support is enabled"
+}
