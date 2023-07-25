@@ -40,8 +40,7 @@ usage : |-
   ### Transit Gateway For Single Account
   ```hcl
     module "transit-gateway" {
-
-       source        = "clouddrove/transit-gateway/aws"
+       source      = "clouddrove/transit-gateway/aws"
        name        = "transit-gateway"
        environment = "test"
        label_order = ["environment", "name"]
@@ -67,8 +66,7 @@ usage : |-
   ### Transit Gateway Diffrent AWS Account
   ```hcl
       module "transit-gateway" {
-
-        source        = "clouddrove/transit-gateway/aws"
+        source      = "clouddrove/transit-gateway/aws"
         name        = "transit-gateway"
         environment = "test"
         label_order = ["environment", "name"]
