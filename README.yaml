@@ -25,6 +25,10 @@ badges:
     image: "https://img.shields.io/badge/License-APACHE-blue.svg"
     url: "LICENSE.md"
 
+prerequesties:
+  - name: Terraform 1.4.6
+    url: https://learn.hashicorp.com/terraform/getting-started/install.html
+
 #  description of this project
 description: |-
   Terraform module which creates Transit Gateway, Resource Association, Principal Association, Resource Share, Transit Gateway VPC Attachment on AWS.
