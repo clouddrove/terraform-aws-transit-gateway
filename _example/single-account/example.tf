@@ -40,7 +40,7 @@ module "vpc-other" {
 }
 
 module "subnets-other" {
-  source              = "clouddrove/subnet/aws"
+  source  = "clouddrove/subnet/aws"
   version = "1.3.0"
 
   name                = "subnets"
@@ -75,7 +75,7 @@ module "transit-gateway" {
   resource_share_allow_external_principals = true
   resource_share_account_ids               = ["XXXXXXXXXXXXX"]
   subnet_ids                               = module.subnets.private_subnet_id
-  
+
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id

@@ -90,7 +90,7 @@ data "aws_route_tables" "main" {
   count  = var.enable && var.vpc_attachement_create ? 1 : 0
   vpc_id = var.vpc_id
 
-  
+
 }
 
 #Module      : AWS ROUTE
