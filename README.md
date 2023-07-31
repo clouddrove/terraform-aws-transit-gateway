@@ -13,17 +13,14 @@
 
 <p align="center">
 
-<a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v1.1.7-green" alt="Terraform">
+<a href="https://github.com/clouddrove/terraform-aws-transit-gateway/releases/latest">
+  <img src="https://img.shields.io/github/release/clouddrove/terraform-aws-transit-gateway.svg" alt="Latest Release">
+</a>
+<a href="https://github.com/clouddrove/terraform-aws-transit-gateway/actions/workflows/tfsec.yml">
+  <img src="https://github.com/clouddrove/terraform-aws-transit-gateway/actions/workflows/tfsec.yml/badge.svg" alt="tfsec">
 </a>
 <a href="LICENSE.md">
   <img src="https://img.shields.io/badge/License-APACHE-blue.svg" alt="Licence">
-</a>
-<a href="https://github.com/clouddrove/terraform-aws-transit-gateway/actions/workflows/terraform.yml">
-  <img src="https://github.com/clouddrove/terraform-aws-transit-gateway/actions/workflows/terraform.yml/badge.svg" alt="static-checks">
-</a>
-<a href="https://github.com/clouddrove/terraform-aws-vpc/actions/workflows/tfsec.yml">
-  <img src="https://github.com/clouddrove/terraform-aws-vpc/actions/workflows/tfsec.yml/badge.svg" alt="tfsec">
 </a>
 
 
@@ -56,11 +53,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 ## Prerequisites
 
 This module has a few dependencies: 
-
-- [Terraform 1.x.x](https://learn.hashicorp.com/terraform/getting-started/install.html)
-- [Go](https://golang.org/doc/install)
-- [github.com/stretchr/testify/assert](https://github.com/stretchr/testify)
-- [github.com/gruntwork-io/terratest/modules/terraform](https://github.com/gruntwork-io/terratest)
+- [Terraform 1.4.6](https://learn.hashicorp.com/terraform/getting-started/install.html)
 
 
 
@@ -78,9 +71,8 @@ Here are some examples of how you can use this module in your inventory structur
 
 ### Transit Gateway For Single Account
 ```hcl
-  module "transit-gateway" {
-
-     source        = "clouddrove/transit-gateway/aws"
+     module "transit-gateway" {
+     source      = "clouddrove/transit-gateway/aws"
      name        = "transit-gateway"
      environment = "test"
      label_order = ["environment", "name"]
@@ -106,23 +98,22 @@ Here are some examples of how you can use this module in your inventory structur
 ### Transit Gateway Diffrent AWS Account
 ```hcl
     module "transit-gateway" {
+    source      = "clouddrove/transit-gateway/aws"
+    name        = "transit-gateway"
+    environment = "test"
+    label_order = ["environment", "name"]
 
-      source        = "clouddrove/transit-gateway/aws"
-      name        = "transit-gateway"
-      environment = "test"
-      label_order = ["environment", "name"]
+    #Transit gateway invitation accepter
+    aws_ram_resource_share_accepter = true
+    resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-      #Transit gateway invitation accepter
-      aws_ram_resource_share_accepter = true
-      resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
-
-      # VPC Attachements
-      vpc_attachement_create          = false # Enable After once create the subnets
-      vpc_id                          = module.vpc.vpc_id
-      use_existing_transit_gateway_id = true
-      transit_gateway_id              = "tgw-XXXXXXXXXXX"
-      destination_cidr_block          = ["10.0.0.0/8", "172.16.0.0/12"]
-    }
+    # VPC Attachements
+    vpc_attachement_create          = false # Enable After once create the subnets
+    vpc_id                          = module.vpc.vpc_id
+    use_existing_transit_gateway_id = true
+    transit_gateway_id              = "tgw-XXXXXXXXXXX"
+    destination_cidr_block          = ["10.0.0.0/8", "172.16.0.0/12"]
+     }
 ```
 
 
@@ -135,17 +126,18 @@ Here are some examples of how you can use this module in your inventory structur
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | amazon\_side\_asn | Private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is 64512 to 65534 for 16-bit ASNs and 4200000000 to 4294967294 for 32-bit ASNs. Default value: 64512. | `number` | `64512` | no |
-| attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
 | auto\_accept\_shared\_attachments | Whether resource attachment requests are automatically accepted. Valid values: disable, enable. Default value: disable. | `string` | `"disable"` | no |
 | aws\_ram\_resource\_share\_accepter | Accepter the RAM. | `bool` | `false` | no |
 | default\_route\_table\_association | Whether resource attachments are automatically associated with the default association route table. Valid values: disable, enable. Default value: enable. | `string` | `"enable"` | no |
 | default\_route\_table\_propagation | Whether resource attachments automatically propagate routes to the default propagation route table. Valid values: disable, enable. Default value: enable. | `string` | `"enable"` | no |
 | description | Description of the EC2 Transit Gateway | `string` | `""` | no |
 | destination\_cidr\_block | The destination CIDR block. | `list(any)` | `[]` | no |
+| dns\_support | Should be true to enable DNS support in the TGW | `string` | `"enable"` | no |
 | enable | Whether or not to enable the entire module or not. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | label\_order | Label order, e.g. `name`. | `list(any)` | `[]` | no |
 | managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | `string` | `"anmol@clouddrove.com"` | no |
+| multicast\_support | Whether multicast support is enabled | `string` | `"enable"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-transit-gateway"` | no |
 | resource\_share\_account\_ids | Ids of the account where the Transit Gateway should be shared. | `list(any)` | `[]` | no |
@@ -153,8 +145,8 @@ Here are some examples of how you can use this module in your inventory structur
 | resource\_share\_arn | ARN of RAM. | `string` | `""` | no |
 | resource\_share\_enable | Whether or not to create a Resource Share for the Transit Gateway. | `bool` | `false` | no |
 | subnet\_ids | Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway. | `list(any)` | `[]` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(any)` | `{}` | no |
 | tgw\_create | Whether or not to create a Transit Gateway. | `bool` | `false` | no |
+| transit\_gateway\_cidr\_blocks | One or more IPv4 or IPv6 CIDR blocks for the transit gateway. Must be a size /24 CIDR block or larger for IPv4, or a size /64 CIDR block or larger for IPv6 | `list(string)` | `[]` | no |
 | transit\_gateway\_default\_route\_table\_association | Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | `bool` | `true` | no |
 | transit\_gateway\_default\_route\_table\_propagation | Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true. | `bool` | `true` | no |
 | transit\_gateway\_id | The ID of gateway id. | `string` | `""` | no |
@@ -167,6 +159,10 @@ Here are some examples of how you can use this module in your inventory structur
 
 | Name | Description |
 |------|-------------|
+| ec2\_transit\_gateway\_arn | EC2 Transit Gateway Amazon Resource Name (ARN) |
+| ec2\_transit\_gateway\_route\_table\_id | EC2 Transit Gateway Route Table identifier |
+| ec2\_transit\_gateway\_vpc\_attachment | Map of EC2 Transit Gateway VPC Attachment attributes |
+| ram\_resource\_share\_id | The Amazon Resource Name (ARN) of the resource share |
 | resource\_share\_arn | The ARN  of the RAM. |
 | tags | A mapping of tags to assign to the resource. |
 | transit\_gateway\_id | The ID of the Transit Gateway. |
