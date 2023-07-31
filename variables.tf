@@ -10,7 +10,6 @@ variable "repository" {
   type        = string
   default     = "https://github.com/clouddrove/terraform-aws-transit-gateway"
   description = "Terraform current module repo"
-
 }
 
 variable "environment" {
@@ -25,18 +24,6 @@ variable "label_order" {
   description = "Label order, e.g. `name`."
 }
 
-variable "attributes" {
-  type        = list(any)
-  default     = []
-  description = "Additional attributes (e.g. `1`)."
-}
-
-variable "tags" {
-  type        = map(any)
-  default     = {}
-  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
-}
-
 variable "managedby" {
   type        = string
   default     = "anmol@clouddrove.com"
@@ -44,8 +31,9 @@ variable "managedby" {
 }
 
 variable "enable" {
-  description = "Whether or not to enable the entire module or not."
+  type        = bool
   default     = true
+  description = "Whether or not to enable the entire module or not."
 }
 
 # Transit Gateway
@@ -168,4 +156,22 @@ variable "aws_ram_resource_share_accepter" {
   type        = bool
   default     = false
   description = "Accepter the RAM."
+}
+
+variable "transit_gateway_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "One or more IPv4 or IPv6 CIDR blocks for the transit gateway. Must be a size /24 CIDR block or larger for IPv4, or a size /64 CIDR block or larger for IPv6"
+}
+
+variable "dns_support" {
+  type        = string
+  default     = "enable"
+  description = "Should be true to enable DNS support in the TGW"
+}
+
+variable "multicast_support" {
+  type        = string
+  default     = "enable"
+  description = "Whether multicast support is enabled"
 }
