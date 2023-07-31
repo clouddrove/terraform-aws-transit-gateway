@@ -37,7 +37,7 @@ resource "aws_ec2_transit_gateway" "main" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   count = var.enable && var.vpc_attachement_create ? 1 : 0
 
-  transit_gateway_id                              = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
+  transit_gateway_id                              = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main[*].id) : var.transit_gateway_id
   subnet_ids                                      = var.subnet_ids
   vpc_id                                          = var.vpc_id
   transit_gateway_default_route_table_association = var.transit_gateway_default_route_table_association
@@ -73,7 +73,7 @@ resource "aws_ram_principal_association" "main" {
   count = var.enable && var.resource_share_enable ? length(var.resource_share_account_ids) : 0
 
   principal          = element(var.resource_share_account_ids, count.index)
-  resource_share_arn = join("", aws_ram_resource_share.main.*.id)
+  resource_share_arn = join("", aws_ram_resource_share.main[*].id)
 }
 
 ##------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ resource "aws_route" "main" {
 
   route_table_id         = element(distinct(sort(data.aws_route_tables.main[0].ids)), count.index)
   destination_cidr_block = element(distinct(sort(var.destination_cidr_block)), ceil(count.index / length(var.destination_cidr_block), ), )
-  transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main.*.id) : var.transit_gateway_id
+  transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main[*].id) : var.transit_gateway_id
   depends_on = [
     data.aws_route_tables.main,
     aws_ec2_transit_gateway_vpc_attachment.main,

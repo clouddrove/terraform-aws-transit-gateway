@@ -1,5 +1,5 @@
 output "transit_gateway_id" {
-  value       = module.transit-gateway.*.transit_gateway_id
+  value       = module.transit-gateway[*].transit_gateway_id
   description = "The ID of the transit-gateway."
 }
 
