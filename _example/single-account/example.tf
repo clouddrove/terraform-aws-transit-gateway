@@ -1,12 +1,9 @@
-##------------------------------------------------------------------------------
-## Provider block added, Use the Amazon Web Services (AWS) provider to interact with the many resources supported by AWS.
-##------------------------------------------------------------------------------
 provider "aws" {
   region = "eu-west-2"
 }
 
 ##------------------------------------------------------------------------------
-## A VPC is a virtual network that closely resembles a traditional network that you'd operate in your own data center.
+# VPC module call.
 ##------------------------------------------------------------------------------
 module "vpc" {
   source  = "clouddrove/vpc/aws"
@@ -14,20 +11,18 @@ module "vpc" {
 
   name        = "vpc"
   environment = "test"
-  label_order = ["environment", "name"]
   cidr_block  = "10.10.0.0/16"
 }
 
 ##------------------------------------------------------------------------------
-## A subnet is a range of IP addresses in your VPC.
+# Subnets module call.
 ##------------------------------------------------------------------------------
 module "subnets" {
   source  = "clouddrove/subnet/aws"
-  version = "1.3.0"
+  version = "2.0.0"
 
-  name                = "subnets"
+  name                = "subnet"
   environment         = "test"
-  label_order         = ["environment", "name"]
   availability_zones  = ["eu-west-2a", "eu-west-2b"]
   vpc_id              = module.vpc.vpc_id
   type                = "public"
@@ -38,7 +33,7 @@ module "subnets" {
 }
 
 ##------------------------------------------------------------------------------
-## A VPC is a virtual network that closely resembles a traditional network that you'd operate in your own data center.
+# other-vpc module call.
 ##------------------------------------------------------------------------------
 module "vpc-other" {
   source  = "clouddrove/vpc/aws"
@@ -46,21 +41,19 @@ module "vpc-other" {
 
   name        = "vpc"
   environment = "test"
-  label_order = ["environment", "name"]
 
   cidr_block = "192.168.0.0/16"
 }
 
 ##------------------------------------------------------------------------------
-## A subnet is a range of IP addresses in your VPC.
+# other-subnets module call.
 ##------------------------------------------------------------------------------
 module "subnets-other" {
   source  = "clouddrove/subnet/aws"
-  version = "1.3.0"
+  version = "2.0.0"
 
-  name                = "subnet"
+  name                = "subnets"
   environment         = "test"
-  label_order         = ["environment", "name"]
   availability_zones  = ["eu-west-2a", "eu-west-2b"]
   vpc_id              = module.vpc-other.vpc_id
   type                = "public"
@@ -78,8 +71,6 @@ module "transit-gateway" {
   source                          = "./../../"
   name                            = "transit-gateway"
   environment                     = "test"
-  label_order                     = ["environment", "name"]
-  enable                          = true
   tgw_create                      = true
   amazon_side_asn                 = 64512
   auto_accept_shared_attachments  = "enable"
@@ -88,7 +79,7 @@ module "transit-gateway" {
   #TGW Share
   resource_share_enable                    = false
   resource_share_allow_external_principals = true
-  resource_share_account_ids               = ["XXXXXXXXXXXXX"]
+  resource_share_account_ids               = ["xxxxxxxxxxx"]
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
@@ -103,7 +94,6 @@ module "vpc-attachement-2" {
   source      = "./../../"
   name        = "transit-gateway"
   environment = "test"
-  label_order = ["environment", "name"]
   # VPC Attachements
   vpc_id                          = module.vpc-other.vpc_id
   destination_cidr_block          = ["10.20.0.0/16"]

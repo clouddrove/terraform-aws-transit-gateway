@@ -35,3 +35,28 @@ output "ram_resource_share_id" {
   value       = try(aws_ram_resource_share.main[0].id, "")
   description = "The Amazon Resource Name (ARN) of the resource share"
 }
+
+output "ec2_transit_gateway_association_default_route_table_id" {
+  value       = try(aws_ec2_transit_gateway.main[0].association_default_route_table_id, "")
+  description = "Identifier of the default association route table"
+}
+
+output "ec2_transit_gateway_propagation_default_route_table_id" {
+  value       = try(aws_ec2_transit_gateway.main[0].propagation_default_route_table_id, "")
+  description = "Identifier of the default propagation route table"
+}
+
+output "ec2_transit_gateway_vpc_attachment_ids" {
+  value       = [for k, v in aws_ec2_transit_gateway_vpc_attachment.main : v.id]
+  description = "List of EC2 Transit Gateway VPC Attachment identifiers"
+}
+
+output "ram_principal_association_id" {
+  value       = try(aws_ram_principal_association.main[0].id, "")
+  description = "The Amazon Resource Name (ARN) of the Resource Share and the principal, separated by a comma"
+}
+
+output "ec2_transit_gateway_owner_id" {
+  value       = try(aws_ec2_transit_gateway.main[0].owner_id, "")
+  description = "Identifier of the AWS account that owns the EC2 Transit Gateway"
+}

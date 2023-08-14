@@ -20,7 +20,7 @@ variable "environment" {
 
 variable "label_order" {
   type        = list(any)
-  default     = []
+  default     = ["environment", "name"]
   description = "Label order, e.g. `name`."
 }
 
@@ -174,4 +174,16 @@ variable "multicast_support" {
   type        = string
   default     = "enable"
   description = "Whether multicast support is enabled"
+}
+
+variable "ipv6_support" {
+  type        = string
+  default     = "disable"
+  description = "Whether IPv6 support is enabled. Valid values: disable, enable. Default value: disable."
+}
+
+variable "appliance_mode_support" {
+  type        = string
+  default     = "enable"
+  description = "Whether Appliance Mode support is enabled. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. Valid values: disable, enable. Default value: disable."
 }

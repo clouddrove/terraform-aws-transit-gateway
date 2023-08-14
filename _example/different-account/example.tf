@@ -2,24 +2,26 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+##------------------------------------------------------------------------------
+# VPC module call.
+##------------------------------------------------------------------------------
 module "vpc" {
-  source  = "clouddrove/vpc/aws"
-  version = "2.0.0"
-
+  source      = "clouddrove/vpc/aws"
+  version     = "2.0.0"
   name        = "vpc"
   environment = "test"
-  label_order = ["environment", "name"]
   cidr_block  = "172.16.0.0/16"
 }
 
+##------------------------------------------------------------------------------
+# Subnet module call.
+##------------------------------------------------------------------------------
 module "subnets" {
   source  = "clouddrove/subnet/aws"
   version = "1.3.0"
 
-  name        = "subnets"
-  environment = "test"
-  label_order = ["environment", "name"]
-
+  name                = "subnets"
+  environment         = "test"
   availability_zones  = ["eu-west-1a", "eu-west-1b"]
   vpc_id              = module.vpc.vpc_id
   type                = "public"
@@ -30,11 +32,13 @@ module "subnets" {
 
 }
 
+##------------------------------------------------------------------------------
+# transit-gateway module call.
+##------------------------------------------------------------------------------
 module "transit-gateway" {
   source      = "./../../"
   name        = "transit-gateway"
   environment = "test"
-  label_order = ["environment", "name"]
 
   #Transit gateway invitation accepter
   aws_ram_resource_share_accepter = false

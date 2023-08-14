@@ -47,7 +47,6 @@ usage : |-
        source      = "clouddrove/transit-gateway/aws"
        name        = "transit-gateway"
        environment = "test"
-       label_order = ["environment", "name"]
        enable      = true
        tgw_create  = true
 
@@ -67,13 +66,13 @@ usage : |-
        destination_cidr_block = [ "10.0.0.0/8", "172.16.0.0/12"]
      }
   ```
+
   ### Transit Gateway Diffrent AWS Account
   ```hcl
       module "transit-gateway" {
       source      = "clouddrove/transit-gateway/aws"
       name        = "transit-gateway"
       environment = "test"
-      label_order = ["environment", "name"]
 
       #Transit gateway invitation accepter
       aws_ram_resource_share_accepter = true

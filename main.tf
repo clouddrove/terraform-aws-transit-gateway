@@ -40,6 +40,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   transit_gateway_id                              = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main[*].id) : var.transit_gateway_id
   subnet_ids                                      = var.subnet_ids
   vpc_id                                          = var.vpc_id
+  dns_support                                     = var.dns_support
+  ipv6_support                                    = var.ipv6_support
+  appliance_mode_support                          = var.appliance_mode_support
   transit_gateway_default_route_table_association = var.transit_gateway_default_route_table_association
   transit_gateway_default_route_table_propagation = var.transit_gateway_default_route_table_propagation
   tags = merge(
