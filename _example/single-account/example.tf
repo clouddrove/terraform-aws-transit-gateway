@@ -79,17 +79,17 @@ module "transit-gateway" {
   #TGW Share
   resource_share_enable                    = false
   resource_share_allow_external_principals = true
-  resource_share_account_ids               = ["xxxxxxxxxxx"]
+  resource_share_account_ids               = ["xxxxxxxxx"]
   # VPC Attachements
   vpc_attachement_create = false # Enable After once create the subnets
   vpc_id                 = module.vpc.vpc_id
   subnet_ids             = module.subnets.public_subnet_id
-  destination_cidr_block = ["192.168.0.0/16"]
+  destination_cidr_block = ["192.168.0.0/16", "172.16.0.0/12"]
 }
 
-##------------------------------------------------------------------------------
-## vpc-attachement module call.
-##------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# vpc-attachement module call.
+#------------------------------------------------------------------------------
 module "vpc-attachement-2" {
   source      = "./../../"
   name        = "transit-gateway"

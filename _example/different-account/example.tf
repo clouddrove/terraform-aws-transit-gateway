@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "eu-west-2"
 }
 
 ##------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ module "subnets" {
 
   name                = "subnets"
   environment         = "test"
-  availability_zones  = ["eu-west-1a", "eu-west-1b"]
+  availability_zones  = ["eu-west-2a", "eu-west-2b"]
   vpc_id              = module.vpc.vpc_id
   type                = "public"
   igw_id              = module.vpc.igw_id
@@ -42,13 +42,14 @@ module "transit-gateway" {
 
   #Transit gateway invitation accepter
   aws_ram_resource_share_accepter = false
-  resource_share_arn              = "arn:aws:ram:eu-west-1:XXXXXXXXXXX:resource-share/XXXXXXXXXXXXXXXXXXXXXXXXXX"
-  subnet_ids                      = module.subnets.private_subnet_id
+  resource_share_arn              = "arn:aws:ram:eu-west-2:"
 
   # VPC Attachements
   vpc_attachement_create          = false # Enable After once create the subnets
   vpc_id                          = module.vpc.vpc_id
   use_existing_transit_gateway_id = true
-  transit_gateway_id              = "tgw-XXXXXXXXXXX"
-  destination_cidr_block          = ["10.0.0.0/8", "172.16.0.0/12"]
+  transit_gateway_id              = "tgw-xxxxxxxx"
+  destination_cidr_block          = ["192.168.0.0/16", "172.16.0.0/12"]
+  subnet_ids                      = module.subnets.public_subnet_id
+
 }
