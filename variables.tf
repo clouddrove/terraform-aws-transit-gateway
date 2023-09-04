@@ -187,3 +187,9 @@ variable "appliance_mode_support" {
   default     = "enable"
   description = "Whether Appliance Mode support is enabled. If enabled, a traffic flow between a source and destination uses the same Availability Zone for the VPC attachment for the lifetime of that flow. Valid values: disable, enable. Default value: disable."
 }
+
+variable "timeouts" {
+  description = "Create, update, and delete timeout configurations for the transit gateway"
+  type        = map(string)
+  default     = {}
+}
