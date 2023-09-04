@@ -33,8 +33,8 @@ resource "aws_ec2_transit_gateway" "main" {
 ## Get information on an EC2 Transit Gateway VPC Attachment.
 ##------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
-  for_each                                        = var.enable ? { for attach in var.vpc_attachments : attach.vpc_id => attach } : {}
-  transit_gateway_id                              = coalesce(each.value.transit_gateway_id, aws_ec2_transit_gateway.main[0].id)
+  for_each                                        = var.enable ? var.vpc_attachments : {}
+  transit_gateway_id                              = var.transit_gateway_id != null ? var.transit_gateway_id : aws_ec2_transit_gateway.main[0].id
   subnet_ids                                      = each.value.subnet_ids
   vpc_id                                          = each.value.vpc_id
   dns_support                                     = lookup(each.value, "dns_support", "enable")
@@ -83,24 +83,25 @@ resource "aws_ram_resource_association" "main" {
   resource_share_arn = aws_ram_resource_share.main[0].arn
 }
 
-data "aws_route_tables" "main" {
-  for_each = var.enable ? { for attach in var.vpc_attachments : attach.vpc_id => attach } : {}
-  vpc_id   = each.value.vpc_id
+locals {
+  vpc_route_table = flatten([
+    for k, v in var.vpc_attachments : [
+      for rtb_id in try(v.vpc_route_table_ids, []) : [for cidr in try(v.destination_cidr) : {
+        rtb_id = rtb_id
+        cidr   = cidr
+        }
+    ]]
+  ])
 }
 
 ##------------------------------------------------------------------------------
 ## Provides a resource to create a routing table entry (a route) in a VPC routing table.
 ##------------------------------------------------------------------------------
 resource "aws_route" "main" {
-#  count                  = var.enable && var.vpc_attachement_create ? length(distinct(sort(data.aws_route_tables.main[*].ids)), ) * length(var.destination_cidr_block) : 0
-  for_each = var.enable ? { for attach in var.vpc_attachments : attach.vpc_id => attach } : {}
-  route_table_id         = element(distinct(sort(data.aws_route_tables.main[0].ids)), count.index)
-  destination_cidr_block = element(distinct(sort(var.destination_cidr_block)), ceil(count.index / length(var.destination_cidr_block), ), )
-  transit_gateway_id     = var.use_existing_transit_gateway_id == false ? join("", aws_ec2_transit_gateway.main[*].id) : var.transit_gateway_id
-  depends_on = [
-    data.aws_route_tables.main,
-    aws_ec2_transit_gateway_vpc_attachment.main,
-  ]
+  count                  = var.enable ? length(local.vpc_route_table) : 0
+  route_table_id         = local.vpc_route_table[count.index].rtb_id
+  destination_cidr_block = local.vpc_route_table[count.index].cidr
+  transit_gateway_id     = var.transit_gateway_id != null ? var.transit_gateway_id : aws_ec2_transit_gateway.main[0].id
 }
 
 ##------------------------------------------------------------------------------
