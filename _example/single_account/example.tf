@@ -23,6 +23,8 @@ module "vpc" {
 ##------------------------------------------------------------------------------
 # Subnet module call.
 ##------------------------------------------------------------------------------
+#tfsec:ignore:aws-ec2-no-excessive-port-access # Ingnored because these are basic examples, it can be changed via varibales as per requirement. 
+#tfsec:ignore:aws-ec2-no-public-ingress-acl # Ingnored because these are basic examples, it can be changed via varibales as per requirement. 
 module "subnets" {
   source              = "clouddrove/subnet/aws"
   version             = "2.0.0"
@@ -51,6 +53,8 @@ module "vpc_other" {
 ##------------------------------------------------------------------------------
 # Other-subnet module call.
 ##------------------------------------------------------------------------------
+#tfsec:ignore:aws-ec2-no-excessive-port-access # Ingnored because these are basic examples, it can be changed via varibales as per requirement. 
+#tfsec:ignore:aws-ec2-no-public-ingress-acl # Ingnored because these are basic examples, it can be changed via varibales as per requirement. 
 module "subnets_other" {
   source              = "clouddrove/subnet/aws"
   version             = "2.0.0"
