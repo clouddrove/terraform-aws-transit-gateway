@@ -72,7 +72,7 @@ module "subnets_other" {
 ##------------------------------------------------------------------------------
 ## transit-gateway module call.
 ##------------------------------------------------------------------------------
-module "transit-gateway" {
+module "transit_gateway" {
   depends_on                      = [module.vpc, module.subnets]
   source                          = "./../../"
   name                            = local.name

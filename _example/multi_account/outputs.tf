@@ -9,7 +9,7 @@ output "ram_resource_share_id" {
 }
 
 output "ec2_transit_gateway_association_default_route_table_id" {
-  value       = module.transit-gateway.ec2_transit_gateway_association_default_route_table_id
+  value       = module.transit_gateway.ec2_transit_gateway_association_default_route_table_id
   description = "Identifier of the default association route table"
 }
 
