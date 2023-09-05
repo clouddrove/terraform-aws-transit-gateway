@@ -37,3 +37,8 @@ output "ram_resource_share_id" {
   value       = module.transit-gateway.ram_resource_share_id
   description = "The Amazon Resource Name (ARN) of the resource share"
 }
+
+output "resource_share_arn" {
+  value       = module.transit-gateway.resource_share_arn
+  description = "The ARN  of the RAM."
+}

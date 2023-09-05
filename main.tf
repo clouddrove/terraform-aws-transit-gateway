@@ -33,6 +33,7 @@ resource "aws_ec2_transit_gateway" "main" {
 ## Get information on an EC2 Transit Gateway VPC Attachment.
 ##------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
+  depends_on                                      = [aws_ram_resource_share_accepter.receiver_accept]
   for_each                                        = var.enable ? var.vpc_attachments : {}
   transit_gateway_id                              = var.transit_gateway_id != null ? var.transit_gateway_id : aws_ec2_transit_gateway.main[0].id
   subnet_ids                                      = each.value.subnet_ids
