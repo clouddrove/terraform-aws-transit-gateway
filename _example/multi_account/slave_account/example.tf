@@ -2,14 +2,6 @@ provider "aws" {
   region = "eu-west-2"
 }
 
-provider "aws" {
-  alias = "test"
-  assume_role {
-    role_arn = ""
-  }
-  region = "eu-west-2"
-}
-
 locals {
   name        = "app_1"
   environment = "test"
@@ -47,10 +39,11 @@ module "subnets" {
 
 ##------------------------------------------------------------------------------
 ## Transit-gateway module call for diff account. 
+## Transit gateway configuration for slave account. This account will share/use a central transit gateway hosted in main account. 
 ##------------------------------------------------------------------------------
-module "transit_gateway" {
+module "transit_gateway_peer" {
   depends_on  = [module.vpc, module.subnets]
-  source      = "./../../"
+  source      = "./../../../"
   name        = local.name
   environment = local.environment
   tgw_create  = false
@@ -66,8 +59,8 @@ module "transit_gateway" {
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
       # Below should be uncommented only when vpc and subnet are already deployed.
-      #vpc_route_table_ids                             = module.subnets.public_route_tables_id
-      #destination_cidr                                = ["10.10.0.0/16"]
+      #vpc_route_table_ids                            = module.subnets.public_route_tables_id
+      #destination_cidr                               = ["10.10.0.0/16"]
     }
   }
 }

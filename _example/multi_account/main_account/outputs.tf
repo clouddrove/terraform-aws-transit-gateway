@@ -32,3 +32,13 @@ output "ec2_transit_gateway_vpc_attachment_ids" {
   value       = module.transit_gateway.ec2_transit_gateway_vpc_attachment_ids
   description = "List of EC2 Transit Gateway VPC Attachment identifiers"
 }
+
+output "ram_resource_share_id" {
+  value       = module.transit_gateway.ram_resource_share_id
+  description = "The Amazon Resource Name (ARN) of the resource share"
+}
+
+output "resource_share_arn" {
+  value       = module.transit_gateway.resource_share_arn
+  description = "The ARN  of the RAM."
+}

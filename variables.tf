@@ -88,7 +88,7 @@ variable "resource_share_account_ids" {
 
 variable "resource_share_allow_external_principals" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether or not to allow external principals for the Resource Share for the Transit Gateway."
 }
 

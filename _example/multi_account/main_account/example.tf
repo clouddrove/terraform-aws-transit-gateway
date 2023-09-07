@@ -71,15 +71,22 @@ module "subnets_other" {
 
 ##------------------------------------------------------------------------------
 ## Transit-gateway module call.
+## Transit gateway configuration for main account where a central transit gateway will be hosted and shared with slave(other accounts)
 ##------------------------------------------------------------------------------
 module "transit_gateway" {
-  depends_on      = [module.vpc, module.subnets]
-  source          = "./../../"
-  name            = local.name
-  environment     = local.environment
-  tgw_create      = true
-  amazon_side_asn = 64512
-  description     = "This transit Gateway create for testing purpose"
+  depends_on                      = [module.vpc, module.subnets]
+  source                          = "./../../../"
+  name                            = local.name
+  environment                     = local.environment
+  tgw_create                      = true
+  amazon_side_asn                 = 64512
+  auto_accept_shared_attachments  = "enable"
+  default_route_table_propagation = "enable"
+  description                     = "This transit Gateway create for testing purpose"
+  #TGW Share
+  resource_share_enable                    = true
+  resource_share_allow_external_principals = true
+  resource_share_account_ids               = ["xxxxxxxxxxxx"]
   # VPC Attachements
   vpc_attachments = {
     vpc1 = {
@@ -88,8 +95,8 @@ module "transit_gateway" {
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
       # Below should be uncommented only when vpc and subnet are already deployed.
-      #vpc_route_table_ids                             = module.subnets.public_route_tables_id
-      #destination_cidr                                = ["10.11.0.0/16"]
+      # vpc_route_table_ids                           = module.subnets.public_route_tables_id
+      # destination_cidr                              = ["10.11.0.0/16"]
     },
     vpc2 = {
       vpc_id                                          = module.vpc_other.vpc_id
@@ -97,8 +104,8 @@ module "transit_gateway" {
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
       # Below should be uncommented only when vpc and subnet are already deployed.
-      #vpc_route_table_ids                             = module.subnets_other.public_route_tables_id
-      #destination_cidr                                = ["31.0.0.0/16", "53.0.0.0/16"]
+      #vpc_route_table_ids                            = module.subnets_other.public_route_tables_id
+      #destination_cidr                               = ["31.0.0.0/16", "53.0.0.0/16"]
     }
   }
 }
