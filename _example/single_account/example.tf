@@ -88,8 +88,8 @@ module "transit_gateway" {
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
       # Below should be uncommented only when vpc and subnet are already deployed.
-      vpc_route_table_ids                             = module.subnets.public_route_tables_id
-      destination_cidr                                = []
+      vpc_route_table_ids = module.subnets.public_route_tables_id
+      destination_cidr    = []
     },
     vpc2 = {
       vpc_id                                          = module.vpc_other.vpc_id
@@ -97,8 +97,8 @@ module "transit_gateway" {
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
       # Below should be uncommented only when vpc and subnet are already deployed.
-      vpc_route_table_ids                             = module.subnets_other.public_route_tables_id
-      destination_cidr                                = ["31.0.0.0/16", "53.0.0.0/16"]
+      vpc_route_table_ids = module.subnets_other.public_route_tables_id
+      destination_cidr    = ["31.0.0.0/16", "53.0.0.0/16"]
     }
   }
 }
