@@ -87,7 +87,7 @@ resource "aws_ram_resource_association" "main" {
 locals {
   vpc_route_table = flatten([
     for k, v in var.vpc_attachments : [
-      for rtb_id in try(v.vpc_route_table_ids, []) : [for cidr in try(v.destination_cidr) : {
+      for rtb_id in v.vpc_route_table_ids : [for cidr in v.destination_cidr : {
         rtb_id = rtb_id
         cidr   = cidr
         }
