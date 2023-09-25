@@ -5,11 +5,15 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  single:
+  single-account-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
-      working_directory: './_example/single-account/'
-  different:
+      working_directory: './_example/single_account/'
+  main-account-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
-      working_directory: './_example/different-account/'
+      working_directory: './_example/multi_account/main_account/'
+  slave-account-example:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    with:
+      working_directory: './_example/multi_account/slave_account/'

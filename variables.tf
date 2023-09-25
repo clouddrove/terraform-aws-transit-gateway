@@ -20,7 +20,7 @@ variable "environment" {
 
 variable "label_order" {
   type        = list(any)
-  default     = []
+  default     = ["environment", "name"]
   description = "Label order, e.g. `name`."
 }
 
@@ -79,46 +79,16 @@ variable "tgw_create" {
   description = "Whether or not to create a Transit Gateway."
 }
 
-variable "vpc_attachement_create" {
-  type        = bool
-  default     = false
-  description = "Whether or not to create the Transit Gateway VPC attachment."
-}
-
-variable "subnet_ids" {
-  type        = list(any)
-  default     = []
-  description = "Subnets to attached to the Transit Gateway. These subnets will be used internally by AWS to install the Transit Gateway."
-}
-
-variable "vpc_id" {
-  type        = string
-  default     = ""
-  description = "Identifier of EC2 VPC."
-}
-
-variable "transit_gateway_default_route_table_association" {
-  type        = bool
-  default     = true
-  description = "Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true."
-}
-
-variable "transit_gateway_default_route_table_propagation" {
-  type        = bool
-  default     = true
-  description = "Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table. This cannot be configured or perform drift detection with Resource Access Manager shared EC2 Transit Gateways. Default value: true."
-}
-
 # Resource Share
 variable "resource_share_account_ids" {
-  type        = list(any)
+  type        = list(string)
   default     = []
   description = "Ids of the account where the Transit Gateway should be shared."
 }
 
 variable "resource_share_allow_external_principals" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether or not to allow external principals for the Resource Share for the Transit Gateway."
 }
 
@@ -128,21 +98,9 @@ variable "resource_share_enable" {
   description = "Whether or not to create a Resource Share for the Transit Gateway."
 }
 
-variable "destination_cidr_block" {
-  type        = list(any)
-  default     = []
-  description = "The destination CIDR block."
-}
-
-variable "use_existing_transit_gateway_id" {
-  type        = bool
-  default     = false
-  description = "if use existing gateway id."
-}
-
 variable "transit_gateway_id" {
   type        = string
-  default     = ""
+  default     = null
   description = "The ID of gateway id."
 }
 
@@ -174,4 +132,10 @@ variable "multicast_support" {
   type        = string
   default     = "enable"
   description = "Whether multicast support is enabled"
+}
+
+variable "vpc_attachments" {
+  description = "Maps of maps of VPC details to attach to TGW. Type 'any' to disable type validation by Terraform."
+  type        = any
+  default     = {}
 }
