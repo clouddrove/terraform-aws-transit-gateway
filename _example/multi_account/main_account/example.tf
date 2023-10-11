@@ -93,16 +93,16 @@ module "transit_gateway" {
       subnet_ids                                      = module.subnets.private_subnet_id
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
-      vpc_route_table_ids = module.subnets.public_route_tables_id
-      destination_cidr    = ["10.11.0.0/16", "192.168.0.0/16"]
+      vpc_route_table_ids                             = module.subnets.public_route_tables_id
+      destination_cidr                                = ["10.11.0.0/16", "192.168.0.0/16"]
     },
     vpc2 = {
       vpc_id                                          = module.vpc_other.vpc_id
       subnet_ids                                      = module.subnets_other.public_subnet_id
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
-      vpc_route_table_ids = module.subnets_other.public_route_tables_id
-      destination_cidr    = ["10.10.0.0/16"]
+      vpc_route_table_ids                             = module.subnets_other.public_route_tables_id
+      destination_cidr                                = ["10.10.0.0/16"]
     }
   }
 }

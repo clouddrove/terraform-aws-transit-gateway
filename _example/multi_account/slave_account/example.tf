@@ -42,11 +42,11 @@ module "subnets" {
 ## Transit gateway configuration for slave account. This account will share/use a central transit gateway hosted in main account.
 ##------------------------------------------------------------------------------
 module "transit_gateway_peer" {
-  depends_on       = [module.vpc, module.subnets]
-  source           = "./../../../"
-  name             = local.name
-  environment      = local.environment
-  tgw_create       = false
+  depends_on  = [module.vpc, module.subnets]
+  source      = "./../../../"
+  name        = local.name
+  environment = local.environment
+  tgw_create  = false
   #TGW Share
   aws_ram_resource_share_accepter = true
   resource_share_arn              = "arn:aws:ram:eu-west-1:xxxxxxxx:resource-share/40b2b19b-6de6-478a-849b-xxxxxxxx"
@@ -58,8 +58,8 @@ module "transit_gateway_peer" {
       subnet_ids                                      = module.subnets.private_subnet_id
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
-      vpc_route_table_ids = module.subnets.private_route_tables_id
-      destination_cidr    = ["10.10.0.0/16"]
+      vpc_route_table_ids                             = module.subnets.private_route_tables_id
+      destination_cidr                                = ["10.10.0.0/16"]
     }
   }
 }

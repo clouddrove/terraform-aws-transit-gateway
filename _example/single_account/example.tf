@@ -73,12 +73,12 @@ module "subnets_other" {
 ## Transit-gateway module call.
 ##------------------------------------------------------------------------------
 module "transit_gateway" {
-  depends_on       = [module.vpc, module.subnets]
-  source           = "./../../"
-  name             = local.name
-  environment      = local.environment
-  tgw_create       = true
-  description      = "This transit Gateway create for testing purpose"
+  depends_on  = [module.vpc, module.subnets]
+  source      = "./../../"
+  name        = local.name
+  environment = local.environment
+  tgw_create  = true
+  description = "This transit Gateway create for testing purpose"
   # VPC Attachements
   vpc_attachments = {
     vpc1 = {
@@ -86,16 +86,16 @@ module "transit_gateway" {
       subnet_ids                                      = module.subnets.private_subnet_id
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
-      vpc_route_table_ids = module.subnets.public_route_tables_id
-      destination_cidr    = ["192.168.0.0/16"]
+      vpc_route_table_ids                             = module.subnets.public_route_tables_id
+      destination_cidr                                = ["192.168.0.0/16"]
     },
     vpc2 = {
       vpc_id                                          = module.vpc_other.vpc_id
       subnet_ids                                      = module.subnets_other.private_subnet_id
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
-      vpc_route_table_ids = module.subnets_other.private_route_tables_id
-      destination_cidr    = ["10.10.0.0/16"]
+      vpc_route_table_ids                             = module.subnets_other.private_route_tables_id
+      destination_cidr                                = ["10.10.0.0/16"]
     }
   }
 }
