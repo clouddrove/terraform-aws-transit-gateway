@@ -79,8 +79,6 @@ module "transit_gateway" {
   name                            = local.name
   environment                     = local.environment
   tgw_create                      = true
-  hub_static_route                = true
-  amazon_side_asn                 = 64512
   auto_accept_shared_attachments  = "enable"
   default_route_table_propagation = "enable"
   description                     = "This transit Gateway create for testing purpose"
@@ -95,18 +93,16 @@ module "transit_gateway" {
       subnet_ids                                      = module.subnets.private_subnet_id
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
-      #Below should be uncommented only when vpc and subnet are already deployed.
       vpc_route_table_ids = module.subnets.public_route_tables_id
-      destination_cidr    = ["10.11.0.0/16"]
+      destination_cidr    = ["10.11.0.0/16", "192.168.0.0/16"]
     },
     vpc2 = {
       vpc_id                                          = module.vpc_other.vpc_id
       subnet_ids                                      = module.subnets_other.public_subnet_id
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
-      # Below should be uncommented only when vpc and subnet are already deployed.
       vpc_route_table_ids = module.subnets_other.public_route_tables_id
-      destination_cidr    = ["31.0.0.0/16", "53.0.0.0/16"]
+      destination_cidr    = ["10.10.0.0/16"]
     }
   }
 }
