@@ -139,3 +139,9 @@ variable "vpc_attachments" {
   type        = any
   default     = {}
 }
+
+variable "hub_static_route" {
+  type        = bool
+  default     = false
+  description = "This variable use in create a transit gateway static route"
+}

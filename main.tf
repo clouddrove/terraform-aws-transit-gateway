@@ -97,7 +97,14 @@ locals {
 
 ##------------------------------------------------------------------------------
 ## Provides a resource to create a routing table entry (a route) in a VPC routing table.
-##------------------------------------------------------------------------------
+###------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route" "example" {
+  count                          = var.enable && var.tgw_create && var.hub_static_route ? 1 : 0
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = [for k, v in aws_ec2_transit_gateway_vpc_attachment.main : v.id][0]
+  transit_gateway_route_table_id = aws_ec2_transit_gateway.main[0].association_default_route_table_id
+}
+
 resource "aws_route" "main" {
   count                  = var.enable ? length(local.vpc_route_table) : 0
   route_table_id         = local.vpc_route_table[count.index].rtb_id
@@ -124,4 +131,3 @@ resource "aws_ram_resource_share_accepter" "receiver_accept" {
   count     = var.enable && var.aws_ram_resource_share_accepter ? 1 : 0
   share_arn = var.resource_share_arn
 }
-
