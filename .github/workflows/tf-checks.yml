@@ -8,12 +8,12 @@ jobs:
   single-account-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/single_account/'
+      working_directory: './examples/single_account/'
   main-account-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/multi_account/main_account/'
+      working_directory: './examples/multi_account/main_account/'
   slave-account-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/multi_account/slave_account/'
+      working_directory: './examples/multi_account/slave_account/'

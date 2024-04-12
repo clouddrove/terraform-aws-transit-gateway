@@ -30,7 +30,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "/_example/single_account" # Location of package manifests
+    directory: "/examples/single_account" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -43,7 +43,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "/_example/multi_account/main_account" # Location of package manifests
+    directory: "/examples/multi_account/main_account" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -56,7 +56,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "/_example/multi_account/slave_account" # Location of package manifests
+    directory: "/examples/multi_account/slave_account" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
