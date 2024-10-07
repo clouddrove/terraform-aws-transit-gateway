@@ -43,4 +43,3 @@
 | resource\_share\_arn | The ARN  of the RAM. |
 | tags | A mapping of tags to assign to the resource. |
 | transit\_gateway\_id | The ID of the Transit Gateway. |
-
