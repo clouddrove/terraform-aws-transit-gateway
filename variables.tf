@@ -145,3 +145,9 @@ variable "hub_static_route" {
   default     = false
   description = "This variable use in create a transit gateway static route"
 }
+
+variable "security_group_referencing_support" {
+  type        = string
+  default     = "disable"
+  description = "Specifies whether to enable or disable Security Group Referencing support for the Transit Gateway VPC attachment. Valid values are 'enable' or 'disable'."
+}

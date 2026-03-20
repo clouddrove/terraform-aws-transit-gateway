@@ -16,17 +16,17 @@ module "labels" {
 ## A transit gateway acts as a Regional virtual router for traffic flowing between your virtual private clouds (VPCs) and on-premises networks.
 ##------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway" "main" {
-  count                           = var.enable && var.tgw_create ? 1 : 0
-  description                     = var.description
-  vpn_ecmp_support                = var.vpn_ecmp_support
-  amazon_side_asn                 = var.amazon_side_asn
-  default_route_table_association = var.default_route_table_association
-  auto_accept_shared_attachments  = var.auto_accept_shared_attachments
-  default_route_table_propagation = var.default_route_table_propagation
-  transit_gateway_cidr_blocks     = var.transit_gateway_cidr_blocks
-  dns_support                     = var.dns_support
-  multicast_support               = var.multicast_support
-  tags                            = merge(module.labels.tags, { Name = format("%s-transit_gateway", module.labels.id) })
+  count                              = var.enable && var.tgw_create ? 1 : 0
+  description                        = var.description
+  vpn_ecmp_support                   = var.vpn_ecmp_support
+  amazon_side_asn                    = var.amazon_side_asn
+  default_route_table_association    = var.default_route_table_association
+  auto_accept_shared_attachments     = var.auto_accept_shared_attachments
+  default_route_table_propagation    = var.default_route_table_propagation
+  transit_gateway_cidr_blocks        = var.transit_gateway_cidr_blocks
+  dns_support                        = var.dns_support
+  multicast_support                  = var.multicast_support
+  tags                               = merge(module.labels.tags, { Name = format("%s-transit_gateway", module.labels.id) })
 }
 
 ##------------------------------------------------------------------------------
@@ -43,6 +43,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   appliance_mode_support                          = lookup(each.value, "appliance_mode_support", "disable")
   transit_gateway_default_route_table_association = lookup(each.value, "transit_gateway_default_route_table_association", true)
   transit_gateway_default_route_table_propagation = lookup(each.value, "transit_gateway_default_route_table_propagation", true)
+  security_group_referencing_support              = var.security_group_referencing_support
   tags = merge(
     module.labels.tags,
     {
