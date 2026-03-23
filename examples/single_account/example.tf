@@ -14,7 +14,7 @@ locals {
 ##------------------------------------------------------------------------------
 module "vpc" {
   source      = "clouddrove/vpc/aws"
-  version     = "2.0.0"
+  version     = "2.0.1"
   name        = local.name
   environment = local.environment
   cidr_block  = "10.10.0.0/16"
@@ -44,7 +44,7 @@ module "subnets" {
 ##------------------------------------------------------------------------------
 module "vpc_other" {
   source      = "clouddrove/vpc/aws"
-  version     = "2.0.0"
+  version     = "2.0.1"
   name        = local.other_name
   environment = local.other_environment
   cidr_block  = "192.168.0.0/16"
