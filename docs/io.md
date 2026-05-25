@@ -21,6 +21,7 @@
 | resource\_share\_allow\_external\_principals | Whether or not to allow external principals for the Resource Share for the Transit Gateway. | `bool` | `false` | no |
 | resource\_share\_arn | ARN of RAM. | `string` | `""` | no |
 | resource\_share\_enable | Whether or not to create a Resource Share for the Transit Gateway. | `bool` | `false` | no |
+| security\_group\_referencing\_support | Specifies whether to enable or disable Security Group Referencing support for the Transit Gateway VPC attachment. Valid values are 'enable' or 'disable'. | `string` | `"disable"` | no |
 | tgw\_create | Whether or not to create a Transit Gateway. | `bool` | `false` | no |
 | transit\_gateway\_cidr\_blocks | One or more IPv4 or IPv6 CIDR blocks for the transit gateway. Must be a size /24 CIDR block or larger for IPv4, or a size /64 CIDR block or larger for IPv6 | `list(string)` | `[]` | no |
 | transit\_gateway\_id | The ID of gateway id. | `string` | `null` | no |
@@ -43,3 +44,4 @@
 | resource\_share\_arn | The ARN  of the RAM. |
 | tags | A mapping of tags to assign to the resource. |
 | transit\_gateway\_id | The ID of the Transit Gateway. |
+
